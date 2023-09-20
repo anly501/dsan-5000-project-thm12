@@ -2,19 +2,38 @@ project:
   type: website
 
 website:
-  title: "DSAN-5000: Project"
-  navbar:
-    left:
+  title: "Tyler McCormick DSAN-5000: Project thm12"
+  sidebar:
+    contents:
       - href: index.qmd
-        text: Home
-      - href: clustering/clustering.qmd
-        text: Clustering
+        text: Introduction
+      - href: about.qmd
+        text: About me
+      - href: https://github.com/anly501/dsan-5000-project-thm12
+        text: Code
+      - href: data.qmd
+        text: Data
+      - href: gathering.qmd
+        text: Data Gathering
+      - href: cleaning.qmd
+        text: Data Cleaning
       - href: eda/eda.ipynb
         text: Data Exploration
+      - href: clustering/clustering.qmd
+        text: Clustering
+      - href: dimensionality.qmd
+        text: Dimensionality Reduction
+      - href: decision.qmd
+        text: Decision Trees
+      - href: arm.qmd
+        text: ARM
+      - href: conclusion.qmd
+        text: Conclusions
+      
 format:
   html:
     theme: cosmo
     toc: true
 
 
-
+bibliography: sources.bib

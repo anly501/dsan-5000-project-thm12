@@ -1,43 +1,31 @@
----
-title: "DSAN-5000: Introduction"
----
+# Introduction
+## Factors that affect Strength in Athletes
 
-See the following link for more information about the author: [about me](../../index.html)
+It does not take much evidence to show that sports and the sports industry have a massive influence both within the United States and throughout the world. The sports industry had a global revenue of 487 billion USD in 2022, according to statista.com. Strength is pivotal in athletic performance, serving as a fundamental component across various sports. While the degree of importance attributed to strength may vary from one sport to another, it remains a crucial factor in nearly every athletic endeavor. While skill and technique undeniably contribute to success, the prevailing belief is that stronger athletes often hold a significant competitive advantage and are typically considered better overall athletes. This perspective is reinforced by the stringent measures taken by many sports leagues, which ban and rigorously test for the use of performance-enhancing substances such as anabolic steroids. These regulations underscore the acknowledgment within the sports community that strength is a vital determinant of an athlete's prowess. 
 
-This is a Quarto website.
+Scientific studies further prove this point. A review article by Timothy J. Suchomel, Sophia Nimphius & Michael H. Stone titled, <u>The Importance of Muscular Strength in Athletic Performance</u> looks at previous literature that examines strength's role in sports. The authors concluded that studies showed muscular strength highly correlated to better sprinting, jumping, changing direction, and sports performance. Not only this, but stronger individuals face a lower risk of injury. Evidence strongly suggests that improving muscular strength has no substitute for enhancing various attributes associated with athletic performance while reducing the risk of injury during these activities. For these reasons, athletes should aim to become as strong as possible within their sport's context, as strength serves as a foundation for attributes that help improve athletic performance and reduce injury. [@suchomel_importance_2016]
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+With the established importance of strength, specifically in the context of sports, athletes are constantly looking for ways to improve their strength. This project will look at the factors that affect strength in athletes from a data science perspective. It will look at specific categories of factors such as training, nutrition, and recovery and what category of factors appear to have the greatest impact. The specific questions that will be addressed are:
 
-`HIGHLY RECOMMENDED` 
+- What is the most important factor that contributes to strength in athletes?
+- How does resistance training impact strength gains?
+- What is the significance of periodization in designing strength and training programs?
+- How do different training modalities (e.g., weightlifting, powerlifting, Olympic lifting) affect specific aspects of strength?
+- How does nutrition, including macronutrient intake and timing of meals, influence an athlete's strength?
+- What role do supplements like creatine and caffeine play in enhancing strength performance?
+- How does hydration status affect an athlete's ability to generate force?
+- How does adequate rest and sleep impact an athlete's strength outputs?
+- What recovery strategies, such as foam rolling and massage, contribute to maintaining optimal performance?
+- How can overtraining and fatigue negatively affect strength gains?
+- What psychological techniques can enhance an athlete's performance in maximal efforts?
+- To what extent do an athlete's genetics influence their potential for developing strength?
+- How do age, gender, and body composition affect an individual's strength capabilities?
 
-* It is `highly recommended` that you build your website using `.ipynb` files and NOT `.qmd`files
-* Functionally the two formats are basically identical, i.e. they are just `Markdown` + `Code` 
-* However there is `ONE MAJOR DIFFERENCE`, i.e. `.ipynb` stores the code outputs in the meta-data of the file
-  * This means you `ONLY HAVE TO RUN THE CODE ONCE` with `.ipynb`
-  * `.qmd` will run the code every time you build the website, which can be very slow
-    * There are `caching` options for `.qmd`, however, they are "messier" that just using `.ipynb`
-  * **Note**: `.qmd` is fine if there is no code, in which case it is basically just a `Markdown` file
-* Converting between the two
-  * You can switch between the two formats using 
-  * `quarto convert clustering.qmd` this will output a `.ipynb` version called `clustering.ipynb`
-  * `quarto convert eda.ipynb` this will output a `.qmd` version called `eda.qmd`
-* YOU CAN RUN `R CODE` IN VSC WITH `.ipynb`, see the following link 
-  * [https://saturncloud.io/blog/how-to-use-jupyter-r-kernel-with-visual-studio-code/](https://saturncloud.io/blog/how-to-use-jupyter-r-kernel-with-visual-studio-code/)
-* It is possible, but `NOT RECOMMENDED`, to mix Python and R code in the same file
+There are a number of existing studies and literature that look at specific aspects of these questions. For example, another article by Timothy J. Suchomel, Sophia Nimphius, Christopher R. Bellon, & Michael H. Stone titled, <u>The Importance of Muscular Strength: Training Considerations</u>, looks at how different types of training affect strength. This article underscored that the development of muscular strength involves a multifaceted interplay of factors, including muscle hypertrophy, neuromuscular adaptations, and coordination. Diverse training modalities, such as resistance training or bodyweight exercises, influence these elements to facilitate strength gains. Moreover, strategic programming considerations, including factors like set volume and inter-set rest intervals, finely modulate the adaptive response. For individuals with a limited baseline strength, prioritizing hypertrophy and neuromuscular adaptation is prudent before emphasizing speed-related attributes. Conversely, those with substantial strength can enhance their performance by concentrating on speed-oriented training. [@suchomel_importance_2018]
+
+Another review article and study by Olivier Dupuy, Wafa Douzi, Dimitri Theurot, Laurent Bosquet, and Benoit Dugué titled, <u>An Evidence-Based Approach for Choosing Post-exercise Recovery Techniques to Reduce Markers of Muscle Damage, Soreness, Fatigue, and Inflammation: A Systematic Review With Meta-Analysis</u>, identified various recovery techniques that can alleviate delayed onset muscle soreness and perceived fatigue after a single exercise session. This relates to strength, as recovery can affect strength gains and the ability for athletes to continue to train for strength. The article concludes that massage appears to be the most effective, followed by water immersion and compression garments. For managing perceived fatigue, compression techniques work well. Massage and cold exposure, like water immersion and cryotherapy, are effective to combat inflammation. However, the study ultimately concludes that more research is needed to assess these techniques with regular use and explore potential synergies between them for improved athlete performance. [@dupuy_evidence-based_2018]
+
+Based on existing literature and personal experience, I would hypothesize that genetics, training, and nutrition contribute the most to strength in athletes. Specifically, weight training, proper protein, and micronutrient intake are the controllable factors that contribute to strength in athletes the most. However, I hope to have a more refined and evidence-based answer through data analysis in this study.
 
 
-`IMPORTANT ASIDE`
 
-*  A `.ipynb` file is simply a `JSON` file with a specialized structural format
-*  You can see this by running `more eda/eda.ipynb` from the command line
-* Which will output the following;    
-    ![](images/2023-08-23-09-39-14.png){width=500}
-
-`TIP FOR MAC USERS`
-
-* `command+control+shift+4` is very useful on a mac. 
-  * It takes a screenshot and saves it to the clip-board 
-* The following VSC extension allows you to paste images from the clip-board with `alt+command+v`.    
-    ![](images/2023-08-23-09-35-05.png){width=300}
-* `tab` is your best friend when using the command line, since it does `auto-completion` 
-* `open ./path_to_file` will open any file or directory from the command line 
