@@ -1,0 +1,106 @@
+---
+title: "data_gathering"
+author: "Tyler McCormick"
+date: "2023-10-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r NBA API request}
+library(httr)
+library(jsonlite)
+
+
+# "https://api.sportsdata.io/v3/nba/stats/json/PlayerSeasonStats/{2022}?key="
+
+key <- "c780403889794308b9c5b5ba1106ec09"
+years <- seq(2009, 2023)
+api_data <- data.frame()
+
+for (year in years){
+  url <- paste0("https://api.sportsdata.io/v3/nba/stats/json/PlayerSeasonStats/", year, "?key=", key)
+  response <- GET(url)
+  json_response <- content(response, as = "text")
+  data <- fromJSON(json_response)
+  api_data <- rbind(api_data, data)
+}
+
+
+```
+
+```{r NBA combine cleaning}
+
+nba_combine_data <- read.csv("../../data/00-raw-data/NBA_Draft_Combine.csv")
+
+#reformat names 
+name_parts <- strsplit(nba_combine_data$PLAYER, ",")
+nba_combine_data$Name <- sapply(name_parts, function(parts) paste(rev(parts), collapse = " "))
+
+
+#rename columns
+colnames(nba_combine_data)[which(names(nba_combine_data) == "YEAR")] <- "combine_year"
+colnames(nba_combine_data)[which(names(nba_combine_data) == "VERTICAL.LEAP")] <- "MAX.VERTICAL"
+colnames(nba_combine_data)[which(names(nba_combine_data) == "BAR")] <- "WINGSPAN.HEIGHT.RATIO"
+colnames(nba_combine_data)[which(names(nba_combine_data) == "PBH")] <- "STANDING.TOUCH"
+colnames(nba_combine_data)[which(names(nba_combine_data) == "PDT")] <- "MAX.TOUCH"
+
+#remove unwanted columns
+nba_combine_data <- subset(nba_combine_data, select = -c(PLAYER, PAN))
+
+nba_combine_data$Name <- str_trim(nba_combine_data$Name)
+
+write.csv(nba_combine_data, file = "../../data/01-modified-data/cleaned_nba_combine.csv")
+
+```
+
+```{r NBA player season cleaning}
+library(dplyr)
+
+#only keep season data for each player in which they scored the most points
+grouped_api_data <- api_data %>%
+  group_by(Name)
+
+max_points_season <- grouped_api_data %>%
+  filter(Points == max(Points))
+
+best_api_data <- max_points_season %>%
+  distinct(Name, .keep_all = TRUE)
+
+best_api_data <- subset(best_api_data, select = -c(StatID, TeamID, PlayerID, SeasonType, GlobalTeamID, Updated, Seconds, FantasyPointsDraftKings, FantasyPointsYahoo, FantasyPointsFanDuel, FantasyPointsFantasyDraft, IsClosed, LineupConfirmed, LineupStatus))
+
+write.csv(best_api_data, file = "../../data/01-modified-data/cleaned_best_NBA_season_player.csv")
+
+
+```
+
+```{r merging NBA combine and player season}
+
+
+NBA <- left_join(best_api_data, nba_combine_data, by = "Name")
+NBA <- df[!is.na(df$combine_year), ]
+
+write.csv(NBA, file = "../../data/01-modified-data/cleaned_NBA_combined.csv")
+
+
+```
+
+```{r NFL combine cleaning}
+
+NFL <- read.csv("../../data/00-raw-data/nfl_combine.csv")
+
+NFL <- NFL[!is.na(NFL$Vertical), ]
+NFL <- subset(NFL, select = -c(AV, Pfr_ID))
+colnames(NFL)[which(names(NFL) == "Vertical")] <- "STANDING.VERTICAL"
+
+write.csv(NFL, file = "../../data/01-modified-data/cleaned_NFL_combine.csv")
+```
+
