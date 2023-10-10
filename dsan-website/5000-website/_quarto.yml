@@ -13,9 +13,9 @@ website:
         text: Code
       - href: data.qmd
         text: Data
-      - href: gathering.qmd
+      - href: gathering.ipynb
         text: Data Gathering
-      - href: cleaning.qmd
+      - href: cleaning.ipynb
         text: Data Cleaning
       - href: eda/eda.ipynb
         text: Data Exploration

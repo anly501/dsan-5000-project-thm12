@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tyler McCormick DSAN-5000: Project thm12 – gathering</title>
+<title>Tyler McCormick DSAN-5000: Project thm12 - Tabular Gathering</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -175,15 +209,140 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#nba-combine-data" id="toc-nba-combine-data" class="nav-link active" data-scroll-target="#nba-combine-data">NBA combine data</a></li>
+  <li><a href="#nba-player-season-data" id="toc-nba-player-season-data" class="nav-link" data-scroll-target="#nba-player-season-data">NBA player season data</a></li>
+  <li><a href="#nfl-combine-data" id="toc-nfl-combine-data" class="nav-link" data-scroll-target="#nfl-combine-data">NFL combine data</a></li>
+  <li><a href="#olympic-track-and-field-data" id="toc-olympic-track-and-field-data" class="nav-link" data-scroll-target="#olympic-track-and-field-data">Olympic Track and Field data</a></li>
+  <li><a href="#stretching-study-data" id="toc-stretching-study-data" class="nav-link" data-scroll-target="#stretching-study-data">Stretching Study data</a></li>
+  <li><a href="#text-gathering" id="toc-text-gathering" class="nav-link" data-scroll-target="#text-gathering">Text Gathering</a>
+  <ul class="collapse">
+  <li><a href="#wikipedia-api-text-data" id="toc-wikipedia-api-text-data" class="nav-link" data-scroll-target="#wikipedia-api-text-data">Wikipedia API text data</a></li>
+  <li><a href="#news-api-text-data" id="toc-news-api-text-data" class="nav-link" data-scroll-target="#news-api-text-data">News API text data</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tabular Gathering</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="nba-combine-data" class="level3">
+<h3 class="anchored" data-anchor-id="nba-combine-data">NBA combine data</h3>
+<p>This data was gathered from Kaggle and represents the NBA draft combine testing results from the year 2000 to 2022. The NBA combine is an event in which NBA draft prospects are tested and measured on a number of physical and athletic attributes, including their standing vertical jump and their running vertical jump (max). It is one of the few events in sports in which players physical attribute and athletic abilities are measured in an official and objective manner. I selected this dataset as it may be useful to measure whether there are other physical predictors for vertical jump, as well as for merging with season and game data to see whether vertical jump has an affect on in game performance.</p>
+<p><a href="https://www.kaggle.com/datasets/marcusfern/nba-draft-combine">Source Link</a></p>
+<p>Link to dataset</p>
+<p>Data Visual:</p>
+</section>
+<section id="nba-player-season-data" class="level3">
+<h3 class="anchored" data-anchor-id="nba-player-season-data">NBA player season data</h3>
+<p>This data was gathered from an API using R. The data represents NBA player data for each season from 2009 to 2023. It includes averages and totals from stats like points, rebounds, assists, and other game stats. I included this dataset as I plan to merge it with the previous NBA combine data to see if vertical jump has any relation to in game success for certain stats. I obtained a dataset with every players stats from each season by looping through years and querying the data from each season and then adding it to a single dataset</p>
+<p><a href="https://sportsdata.io/developers/api-documentation/nba#/sports-data-feeds">Source Link</a></p>
+<p>Link to dataset</p>
+<p>Link to code</p>
+<p>Data Visual:</p>
+</section>
+<section id="nfl-combine-data" class="level3">
+<h3 class="anchored" data-anchor-id="nfl-combine-data">NFL combine data</h3>
+<p>This data was gathered from Kaggle and represents the NFL combine testing results from the year 2000 to 2018. The NFL combine is the same concept as the NBA combine, and is actually much more well known and covered than the NBA combine, as many positions in football rely heavily on physical attributes and abilities. I selected this dataset to compare the numbers to the NBA combine and compare how vertical jump for basketball players compares to other athletes, and the NFL is the only other league with a widely covered combine.</p>
+<p><a href="https://www.kaggle.com/datasets/savvastj/nfl-combine-data">Source Link</a></p>
+<p>Link to dataset</p>
+<p>Data Visual:</p>
+</section>
+<section id="olympic-track-and-field-data" class="level3">
+<h3 class="anchored" data-anchor-id="olympic-track-and-field-data">Olympic Track and Field data</h3>
+<p>This data was also gathered from Kaggle and represents the results from all Olympic track &amp; field events from 1896 to 2016. I plan to specifically look at the data from the high jump event. While the measurement system is different for high jumping, I would still like to examine how results have changed over years, and if any insights can be realized specifically with nationality.</p>
+<p><a href="https://www.kaggle.com/datasets/jayrav13/olympic-track-field-results">Source Link</a></p>
+<p>Link to dataset</p>
+<p>Data Visual:</p>
+</section>
+<section id="stretching-study-data" class="level3">
+<h3 class="anchored" data-anchor-id="stretching-study-data">Stretching Study data</h3>
+<p>This dataset comes from a study that looked at the the effect of dynamic stretching on vertical jump height in recreational athletes and collegiate students. It includes key metrics on the participants and theeir vertical results from before and after dynamic stretching. This will be useful to look at the effect that dynamic stretching has on vertical jump and if other factors with the participants play a part.</p>
+<p><a href="https://data.mendeley.com/datasets/z7dbpvn64g/1">Source Link</a></p>
+<p>Link to dataset</p>
+<p>Data Visual:</p>
+</section>
+<section id="text-gathering" class="level1">
+<h1>Text Gathering</h1>
+<section id="wikipedia-api-text-data" class="level3">
+<h3 class="anchored" data-anchor-id="wikipedia-api-text-data">Wikipedia API text data</h3>
+<p>This is text data from the Wikipedia page on basketball that was queried using the Wikipedia API. I included this data with the intention to look at what common words appear on the page and therefore are most associated with the sport of basketball, specifically words associated with physical attributes and skills. The code used to query the data is below.</p>
+<p><a href="https://wikipedia.readthedocs.io/en/latest/code.html">Source Link</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> wikipedia</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>wikipedia.search(<span class="st">"basketball"</span>, results<span class="op">=</span><span class="dv">10</span>, suggestion<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#wikipedia api swapping baseball and basketball for some reason</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>page<span class="op">=</span>wikipedia.page(title<span class="op">=</span><span class="st">'baseball'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> page.content</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(text)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"wikipedia_text.txt"</span>, <span class="st">'w'</span>, encoding<span class="op">=</span><span class="st">'utf-8'</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">file</span>.write(text)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="news-api-text-data" class="level3">
+<h3 class="anchored" data-anchor-id="news-api-text-data">News API text data</h3>
+<p>This text data was queried from the News API and containers articles with the word “basketball” in the description. I want to run a similar analysis with this as with the Wikipedia text data. The code used to query the data is below.</p>
+<p><a href="https://newsapi.org/docs">Source Link</a></p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>baseURL <span class="op">=</span> <span class="st">"https://newsapi.org/v2/everything?"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>total_requests<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>verbose<span class="op">=</span><span class="va">True</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>API_KEY<span class="op">=</span><span class="st">'306919e989964d6ba9f61a0b153c64ba'</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>TOPIC<span class="op">=</span><span class="st">'Basketball'</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Query</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>URLpost <span class="op">=</span> {<span class="st">'apiKey'</span>: API_KEY,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">'q'</span>: <span class="st">'+'</span><span class="op">+</span>TOPIC,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">'sortBy'</span>: <span class="st">'relevancy'</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>            <span class="st">'totalRequests'</span>: <span class="dv">1</span>}</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">#request data from the server and extract txt data from request into json</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(baseURL, URLpost) </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> response.json() </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>timestamp <span class="op">=</span> datetime.now().strftime(<span class="st">"%Y-%m-</span><span class="sc">%d</span><span class="st">-H%H-M%M-S%S"</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(timestamp<span class="op">+</span><span class="st">'-newapi-raw-data.json'</span>, <span class="st">'w'</span>) <span class="im">as</span> outfile:</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    json.dump(response, outfile, indent<span class="op">=</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

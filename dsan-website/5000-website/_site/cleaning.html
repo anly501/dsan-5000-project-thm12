@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tyler McCormick DSAN-5000: Project thm12 – cleaning</title>
+<title>Tyler McCormick DSAN-5000: Project thm12 - Tabular cleaning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -175,15 +209,357 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#cleaning-nba-combine-data" id="toc-cleaning-nba-combine-data" class="nav-link active" data-scroll-target="#cleaning-nba-combine-data">Cleaning NBA combine data</a></li>
+  <li><a href="#cleaning-nba-player-season" id="toc-cleaning-nba-player-season" class="nav-link" data-scroll-target="#cleaning-nba-player-season">Cleaning NBA player season</a></li>
+  <li><a href="#merging-nba-combine-and-player-season-data" id="toc-merging-nba-combine-and-player-season-data" class="nav-link" data-scroll-target="#merging-nba-combine-and-player-season-data">Merging NBA combine and player season data</a></li>
+  <li><a href="#cleaning-olympic-track-and-field-data" id="toc-cleaning-olympic-track-and-field-data" class="nav-link" data-scroll-target="#cleaning-olympic-track-and-field-data">Cleaning Olympic Track and Field data</a></li>
+  <li><a href="#cleaning-nfl-combine-data" id="toc-cleaning-nfl-combine-data" class="nav-link" data-scroll-target="#cleaning-nfl-combine-data">Cleaning NFL combine data</a></li>
+  <li><a href="#cleaning-stretching-study-data" id="toc-cleaning-stretching-study-data" class="nav-link" data-scroll-target="#cleaning-stretching-study-data">Cleaning Stretching Study data</a></li>
+  <li><a href="#text-cleaning" id="toc-text-cleaning" class="nav-link" data-scroll-target="#text-cleaning">Text cleaning</a>
+  <ul class="collapse">
+  <li><a href="#wikipedia-api-data-cleaning" id="toc-wikipedia-api-data-cleaning" class="nav-link" data-scroll-target="#wikipedia-api-data-cleaning">Wikipedia APi data cleaning</a></li>
+  <li><a href="#news-api-cleaning" id="toc-news-api-cleaning" class="nav-link" data-scroll-target="#news-api-cleaning">News API cleaning</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tabular cleaning</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="cleaning-nba-combine-data" class="level3">
+<h3 class="anchored" data-anchor-id="cleaning-nba-combine-data">Cleaning NBA combine data</h3>
+<p>I cleaned this data with the intent to merge it with NBA player season data. The first thing I had to do with the NBA combine data was adjust the format of the player name column. I changed the format from (Last, First) to (First Last) using strsplit and sapply in R. I also changed the name of the column from “PLAYER” to “Name” so that can merge the dataset by “Name”. I then renamed some other columns to be more clear, and dropped those that were not needed. This dataset was relatively clean to begin with, so only only a few minor adjustments were needed.</p>
+<p>Link to code</p>
+</section>
+<section id="cleaning-nba-player-season" class="level3">
+<h3 class="anchored" data-anchor-id="cleaning-nba-player-season">Cleaning NBA player season</h3>
+<p>I cleaned and subsetting the The NBA player season data to merge it with the combine data. The dataset had duplicate player values for each season. I subsetted the data to only keep one value for each player in order to merge with the NBA combine dataset. I wanted to keep the version of each player in which they had their best seasopn. I did this by keeping the version of each player that had the the most points for the season. Points are generally the most important stat in basketball, and while assists and rebounds are important, total points should be a good indicator of a season in which a player had one of their best years and remained healthy enough to play most of the season. I then deleted a pleathura of columns that would not be useful in indicating in game performance.</p>
+<p>Link to code</p>
+</section>
+<section id="merging-nba-combine-and-player-season-data" class="level3">
+<h3 class="anchored" data-anchor-id="merging-nba-combine-and-player-season-data">Merging NBA combine and player season data</h3>
+<p>I then merged the subset player season dataset with the NBA combine dataset. I did a full join by Player name in R.</p>
+<p>Link to code</p>
+</section>
+<section id="cleaning-olympic-track-and-field-data" class="level3">
+<h3 class="anchored" data-anchor-id="cleaning-olympic-track-and-field-data">Cleaning Olympic Track and Field data</h3>
+<p>The Olympic Track and Field dataset was already pretty clean, so I just created a subset that only included the High jump event. I then renamed the result column to Best Height (m).</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#subset track data</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>olympic_track<span class="op">=</span> pd.read_csv(<span class="st">"../../data/00-raw-data/olympic_track.csv"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>high_jump <span class="op">=</span> olympic_track[olympic_track[<span class="st">"Event"</span>].<span class="bu">str</span>.contains(<span class="st">"High Jump"</span>, case<span class="op">=</span><span class="va">False</span>, na<span class="op">=</span><span class="va">False</span>)]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>high_jump <span class="op">=</span> high_jump.rename(columns<span class="op">=</span>{<span class="st">"Result"</span>: <span class="st">" Best Height (m)"</span>})</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>high_jump.to_csv(<span class="st">"../../data/01-modified-data/cleaned_high_jump.csv"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Gender            Event     Location  Year Medal                  Name  \
+1199      M    High Jump Men          Rio  2016     G          Derek DROUIN   
+1200      M    High Jump Men          Rio  2016     S    Mutaz Essa BARSHIM   
+1201      M    High Jump Men          Rio  2016     B     Bohdan BONDARENKO   
+1202      M    High Jump Men      Beijing  2008     G         Andrey SILNOV   
+1203      M    High Jump Men      Beijing  2008     S        Germaine MASON   
+...     ...              ...          ...   ...   ...                   ...   
+2204      W  High Jump Women       London  1948     S          Dorothy ODAM   
+2205      W  High Jump Women       London  1948     B  Micheline OSTERMEYER   
+2206      W  High Jump Women  Los Angeles  1932     G           Jean SHILEY   
+2207      W  High Jump Women  Los Angeles  1932     S     Mildred DIDRIKSON   
+2208      W  High Jump Women  Los Angeles  1932     B             Eva DAWES   
+
+     Nationality  Best Height (m)  Unnamed: 8  
+1199         CAN             2.38         NaN  
+1200         QAT             2.36         NaN  
+1201         UKR             2.33         NaN  
+1202         RUS             2.36         NaN  
+1203         GBR             2.34         NaN  
+...          ...              ...         ...  
+2204         GBR             1.68         NaN  
+2205         FRA             1.61         NaN  
+2206         USA             1.65         NaN  
+2207         USA             1.65         NaN  
+2208         CAN              1.6         NaN  
+
+[107 rows x 9 columns]</code></pre>
+</div>
+</div>
+</section>
+<section id="cleaning-nfl-combine-data" class="level3">
+<h3 class="anchored" data-anchor-id="cleaning-nfl-combine-data">Cleaning NFL combine data</h3>
+<p>The NFL combine data was also already pretty clean, so I only made a few adjustments. I discarded values that did not have a result for standing vertical jump. Some prospects opt out of certain events and tests, but I am really only interested at looking at vertical jump for comparison to NBA prospests, so the prospects who did not test were removed from the dataset. I then disarded values that served as dataset IDs and therefore had no significance for analysis. I finally changed the column name for “Vertical” to “STANDING.VERTICAL” so it will be easier to join and conduct analysis with the NBA combine dataset in the future.</p>
+</section>
+<section id="cleaning-stretching-study-data" class="level3">
+<h3 class="anchored" data-anchor-id="cleaning-stretching-study-data">Cleaning Stretching Study data</h3>
+<p>For the stretching data I changed the column “SerialNo.” to “Participant number”, and then changed the values in the gender column to Male or Female rather than 1 or 2.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#clean stretching data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>stretching<span class="op">=</span> pd.read_csv(<span class="st">"../../data/00-raw-data/stretching.csv"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>stretching <span class="op">=</span> stretching.rename(columns<span class="op">=</span>{<span class="st">"Serial</span><span class="ch">\n</span><span class="st"> No."</span>: <span class="st">"Participant number"</span>})</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>stretching[<span class="st">"Gender"</span>] <span class="op">=</span> stretching[<span class="st">"Gender"</span>].replace({<span class="dv">1</span>: <span class="st">"Male"</span>, <span class="dv">2</span>: <span class="st">"Female"</span>})</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>stretching.to_csv(<span class="st">"../../data/01-modified-data/cleaned_stretching.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Participant number  Group  Age  Gender  Height ( Cm )  Weight ( Kg )   BMI  \
+0                   1      1   21    Male         172.72             68  22.8   
+1                   2      1   23    Male         190.50             98  27.0   
+2                   3      1   21    Male         180.30             74  22.8   
+3                   4      1   19  Female         162.50             70  27.2   
+4                   5      1   20  Female         162.50             52  19.7   
+
+   Vertical jump\n height ( Pre ) ( Cm )  \
+0                                     39   
+1                                     32   
+2                                     49   
+3                                     24   
+4                                     27   
+
+   Vertical jump\n height ( Post ) ( Cm )  
+0                                    37.5  
+1                                    35.0  
+2                                    48.0  
+3                                    24.0  
+4                                    26.0  </code></pre>
+</div>
+</div>
+</section>
+<section id="text-cleaning" class="level1">
+<h1>Text cleaning</h1>
+<section id="wikipedia-api-data-cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="wikipedia-api-data-cleaning">Wikipedia APi data cleaning</h3>
+<div class="cell" data-execution_count="83">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Wikipedia api</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.tokenize <span class="im">import</span> word_tokenize</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> wordnet</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.stem <span class="im">import</span> WordNetLemmatizer</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>lemmatizer <span class="op">=</span> WordNetLemmatizer()</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.stem <span class="im">import</span> PorterStemmer</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>stemmer <span class="op">=</span> PorterStemmer()</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#import text data</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'wikipedia_text.txt'</span>, <span class="st">'r'</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> <span class="bu">file</span>.read()</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#create tokens and corpus</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> word_tokenize(text)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>corpus <span class="op">=</span> nltk.tokenize.sent_tokenize(text)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#lemmetization FIX TO ADD WORDS BACK TO SEPERATE LIST</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>lemmatized_tokens <span class="op">=</span> []</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> token <span class="kw">in</span> tokens:</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    lemmatized_token <span class="op">=</span> lemmatizer.lemmatize(token)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    lemmatized_tokens.append(lemmatized_token)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> lemmatized_tokens</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co"># remove digits FIX TO ADD WORDS BACK TO SEPERATE LIST</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> remove_digits(my_string):</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  clean_string <span class="op">=</span> <span class="st">''</span>.join([c <span class="cf">for</span> c <span class="kw">in</span> my_string <span class="cf">if</span> <span class="kw">not</span> c.isdigit()])</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> clean_string</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>no_digit_tokens <span class="op">=</span> []</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> token <span class="kw">in</span> tokens:</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>   no_digit_token <span class="op">=</span> remove_digits(token)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>   no_digit_tokens.append(no_digit_token)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>tokens <span class="op">=</span> no_digit_tokens</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co">#add stopwords</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>more_stopwords <span class="op">=</span> [<span class="st">"one"</span>, <span class="st">"two"</span>, <span class="st">"three"</span>, <span class="st">"four"</span>, <span class="st">"five"</span>, <span class="st">"six"</span>, <span class="st">"seven"</span>, <span class="st">"eight"</span>, <span class="st">"nine"</span>, <span class="st">"ten"</span>]</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>more_stopwords.extend(stopwords.words(<span class="st">'english'</span>))</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co">#put tokens into vectorizer</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>vectorizer <span class="op">=</span> CountVectorizer(token_pattern<span class="op">=</span><span class="vs">r'\b\w+\b'</span>, lowercase<span class="op">=</span><span class="va">True</span>, stop_words<span class="op">=</span> more_stopwords)</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>Xs <span class="op">=</span> vectorizer.fit_transform(tokens)   </span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(Xs))</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co"># VOCABULARY DICTIONARY</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"vocabulary = "</span>,vectorizer.vocabulary_)   </span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="co"># col_names</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>col_names<span class="op">=</span>vectorizer.get_feature_names_out()</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"col_names="</span>,col_names)</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"SPARSE MATRIX</span><span class="ch">\n</span><span class="st">"</span>,Xs)</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>X<span class="op">=</span>np.array(Xs.todense())</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(X)</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'scipy.sparse._csr.csr_matrix'&gt;
+vocabulary =  {'basketball': 146, 'team': 1602, 'sport': 1511, 'commonly': 292, 'player': 1199, 'opposing': 1111, 'another': 78, 'rectangular': 1308, 'court': 339, 'compete': 296, 'primary': 1242, 'objective': 1087, 'shooting': 1450, 'approximately': 85, 'inch': 783, 'cm': 268, 'diameter': 413, 'defender': 384, 'hoop': 753, 'basket': 145, 'mounted': 1037, 'foot': 613, 'high': 738, 'backboard': 129, 'end': 500, 'preventing': 1240, 'field': 584, 'goal': 682, 'worth': 1793, 'point': 1204, 'unless': 1698, 'made': 953, 'behind': 152, 'line': 926, 'foul': 627, 'timed': 1638, 'play': 1197, 'stop': 1548, 'fouled': 628, 'designated': 400, 'shoot': 1448, 'technical': 1606, 'given': 675, 'free': 635, 'throw': 1629, 'game': 652, 'win': 1780, 'regulation': 1324, 'expires': 553, 'score': 1403, 'tied': 1634, 'additional': 24, 'period': 1175, 'overtime': 1136, 'mandated': 967, 'players': 1200, 'advance': 27, 'ball': 137, 'bouncing': 183, 'walking': 1748, 'running': 1389, 'dribbling': 464, 'passing': 1155, 'teammate': 1603, 'require': 1346, 'considerable': 309, 'skill': 1470, 'offense': 1094, 'may': 985, 'use': 1709, 'variety': 1721, 'shot': 1455, 'layup': 899, 'jump': 860, 'dunk': 469, 'defense': 386, 'steal': 1538, 'dribbler': 463, 'intercept': 825, 'pass': 1152, 'block': 168, 'either': 488, 'collect': 274, 'rebound': 1289, 'missed': 1022, 'bounce': 182, 'rim': 1368, 'violation': 1736, 'lift': 919, 'drag': 457, 'pivot': 1189, 'without': 1784, 'carry': 215, 'hold': 747, 'hand': 718, 'resume': 1359, 'side': 1457, 'fall': 566, 'playing': 1201, 'position': 1213, 'tallest': 1597, 'usually': 1713, 'center': 223, 'second': 1413, 'strongest': 1560, 'power': 1224, 'forward': 626, 'slightly': 1474, 'shorter': 1452, 'agile': 40, 'small': 1476, 'shortest': 1453, 'best': 158, 'handler': 721, 'guard': 703, 'implement': 775, 'coach': 269, 'plan': 1192, 'managing': 966, 'execution': 546, 'offensive': 1095, 'defensive': 387, 'positioning': 1214, 'informally': 807, 'invented': 839, 'canadian': 210, 'american': 69, 'gym': 708, 'teacher': 1601, 'james': 849, 'naismith': 1051, 'springfield': 1517, 'massachusetts': 980, 'united': 1696, 'states': 1532, 'ha': 710, 'evolved': 536, 'become': 149, 'world': 1791, 'popular': 1208, 'widely': 1777, 'viewed': 1734, 'national': 1057, 'association': 103, 'nba': 1062, 'significant': 1459, 'professional': 1249, 'league': 903, 'term': 1615, 'popularity': 1209, 'salary': 1395, 'talent': 1594, 'level': 917, 'competition': 300, 'drawing': 458, 'u': 1686, 'college': 275, 'outside': 1130, 'north': 1081, 'america': 68, 'top': 1649, 'club': 267, 'qualify': 1269, 'continental': 319, 'championship': 231, 'euroleague': 526, 'champions': 230, 'americas': 70, 'fiba': 582, 'cup': 360, 'men': 998, 'olympic': 1102, 'tournament': 1659, 'major': 958, 'international': 831, 'event': 531, 'attract': 115, 'around': 94, 'continent': 318, 'host': 759, 'regional': 1320, 'like': 922, 'eurobasket': 524, 'americup': 71, 'women': 1788, 'feature': 575, 'main': 956, 'wnba': 1786, 'ncaa': 1064, 'division': 440, 'also': 60, 'whereas': 1770, 'european': 528, 'participate': 1147, 'history': 745, 'creation': 346, 'december': 378, 'professor': 1250, 'physical': 1186, 'education': 482, 'instructor': 818, 'young': 1806, 'christian': 251, 'training': 1668, 'school': 1399, 'wa': 1746, 'trying': 1678, 'keep': 867, 'class': 259, 'active': 18, 'rainy': 1276, 'day': 373, 'sought': 1494, 'vigorous': 1735, 'indoor': 800, 'student': 1563, 'occupied': 1090, 'proper': 1257, 'fitness': 597, 'long': 935, 'new': 1074, 'england': 507, 'winter': 1782, 'rejecting': 1327, 'idea': 767, 'rough': 1382, 'poorly': 1207, 'suited': 1579, 'walled': 1750, 'gymnasium': 709, 'would': 1794, 'pas': 1151, 'try': 1677, 'tossing': 1651, 'wall': 1749, 'wrote': 1798, 'basic': 143, 'rule': 1386, 'nailed': 1050, 'peach': 1163, 'onto': 1106, 'elevated': 491, 'track': 1663, 'initially': 810, 'set': 1431, 'bottom': 181, 'intact': 821, 'meant': 989, 'retrieved': 1361, 'manually': 971, 'scored': 1406, 'quickly': 1275, 'proved': 1261, 'tedious': 1608, 'removed': 1336, 'allow': 52, 'poked': 1205, 'dowel': 452, 'originally': 1120, 'played': 1198, 'soccer': 1484, 'round': 1383, 'football': 614, 'time': 1637, 'lace': 885, 'close': 265, 'hole': 749, 'needed': 1068, 'inserting': 814, 'inflatable': 803, 'bladder': 166, 'sewn': 1436, 'together': 1645, 'segment': 1419, 'cover': 341, 'flipped': 603, 'could': 336, 'cause': 221, 'unpredictable': 1702, 'eventually': 532, 'construction': 315, 'method': 1006, 'change': 234, 'endorsed': 504, 'advantageous': 30, 'gripping': 699, 'remains': 1335, 'first': 595, 'specifically': 1502, 'brown': 197, 'late': 892, 'tony': 1647, 'hinkle': 742, 'searching': 1411, 'visible': 1739, 'spectator': 1505, 'alike': 49, 'introduced': 837, 'orange': 1114, 'common': 291, 'part': 1145, 'original': 1119, 'except': 541, 'mean': 987, 'movement': 1039, 'limited': 925, 'asymmetric': 105, 'shape': 1440, 'early': 475, 'double': 451, 'dribble': 461, 'used': 1710, 'finally': 591, 'replaced': 1341, 'metal': 1004, 'soon': 1490, 'merely': 1000, 'passed': 1153, 'whenever': 1769, 'person': 1178, 'got': 688, 'gain': 649, 'whichever': 1772, 'mezzanine': 1008, 'balcony': 136, 'impractical': 780, 'began': 151, 'interfere': 828, 'prevent': 1239, 'interference': 829, 'effect': 484, 'allowing': 54, 'handwritten': 723, 'diary': 415, 'discovered': 430, 'granddaughter': 693, 'indicate': 796, 'nervous': 1070, 'incorporated': 790, 'child': 245, 'called': 205, 'duck': 466, 'rock': 1373, 'many': 973, 'failed': 564, 'frank': 633, 'mahan': 955, 'approached': 84, 'christmas': 252, 'break': 191, 'asking': 99, 'intended': 823, 'call': 204, 'replied': 1343, 'n': 1048, 'thought': 1624, 'focused': 608, 'getting': 669, 'started': 1528, 'suggested': 1578, 'laughed': 897, 'saying': 1397, 'name': 1052, 'kill': 874, 'said': 1394, 'seems': 1417, 'good': 686, 'official': 1097, 'ymca': 1803, 'albany': 47, 'york': 1805, 'january': 850, 'ended': 501, 'half': 712, 'size': 1469, 'present': 1236, 'streetball': 1556, 'increased': 792, 'weather': 1758, 'icy': 766, 'taken': 1593, 'indoors': 801, 'convenient': 330, 'split': 1508, 'became': 148, 'standard': 1523, 'adherent': 25, 'dispatched': 432, 'ymcas': 1804, 'throughout': 1628, 'spread': 1515, 'canada': 209, 'well': 1763, 'established': 520, 'several': 1435, 'woman': 1787, 'responsible': 1354, 'developing': 409, 'spreading': 1516, 'within': 1783, 'decade': 377, 'discouraged': 429, 'rowdy': 1384, 'crowd': 356, 'detract': 407, 'mission': 1023, 'however': 761, 'amateur': 67, 'filled': 588, 'void': 1744, 'year': 1802, 'war': 1752, 'athletic': 108, 'union': 1694, 'intercollegiate': 826, 'forerunner': 615, 'vied': 1733, 'control': 325, 'pro': 1246, 'formed': 621, 'protect': 1260, 'exploitation': 554, 'promote': 1253, 'le': 900, 'lasted': 891, 'instrumental': 819, 'establishing': 521, 'colleague': 273, 'c': 201, 'beamis': 147, 'fielded': 585, 'suburban': 1569, 'pittsburgh': 1188, 'geneva': 662, 'later': 893, 'coached': 270, 'university': 1697, 'kansas': 864, 'handing': 719, 'rein': 1325, 'renowned': 1338, 'forrest': 624, 'phog': 1185, 'allen': 50, 'disciple': 427, 'amos': 73, 'alonzo': 59, 'stagg': 1521, 'brought': 196, 'chicago': 243, 'adolph': 26, 'rupp': 1390, 'enjoyed': 509, 'great': 694, 'success': 1571, 'kentucky': 869, 'february': 578, 'hamline': 716, 'agriculture': 41, 'affiliated': 34, 'minnesota': 1017, 'including': 789, 'columbia': 280, 'cornell': 334, 'dartmouth': 371, 'naval': 1060, 'academy': 7, 'colorado': 279, 'yale': 1801, 'sponsoring': 1510, 'frequent': 637, 'injury': 812, 'prompted': 1255, 'president': 1238, 'theodore': 1619, 'roosevelt': 1380, 'suggest': 1577, 'form': 617, 'governing': 689, 'body': 173, 'resulting': 1358, 'iaaus': 765, 'changed': 235, 'collegiate': 277, 'interuniversity': 835, 'kingston': 875, 'ontario': 1105, 'mcgill': 986, 'alma': 56, 'mater': 982, 'visited': 1741, 'queen': 1272, 'minute': 1020, 'settled': 1433, 'outcome': 1124, 'turnout': 1680, 'watched': 1753, 'still': 1546, 'exists': 551, 'athletics': 109, 'naia': 1049, 'organized': 1117, 'invitation': 840, 'nit': 1078, 'rocked': 1374, 'gambling': 651, 'scandal': 1398, 'dozen': 454, 'implicated': 776, 'match': 981, 'fixing': 598, 'shaving': 1442, 'partially': 1146, 'spurred': 1519, 'cheating': 239, 'lost': 944, 'support': 1583, 'widespread': 1778, 'district': 438, 'consolidation': 313, 'far': 571, 'smaller': 1477, 'counterpart': 337, 'th': 1618, 'century': 225, 'ideal': 768, 'interscholastic': 834, 'due': 467, 'modest': 1027, 'equipment': 515, 'personnel': 1180, 'requirement': 1347, 'television': 1610, 'coverage': 342, 'unrivaled': 1703, 'perhaps': 1173, 'legendary': 913, 'indiana': 795, 'franklin': 634, 'wonder': 1789, 'took': 1648, 'nation': 1056, 'storm': 1552, 'dominating': 447, 'earning': 477, 'recognition': 1299, 'today': 1644, 'virtually': 1738, 'every': 534, 'varsity': 1723, 'rural': 1391, 'area': 90, 'identification': 769, 'entire': 512, 'community': 295, 'larger': 888, 'known': 878, 'go': 681, 'higher': 739, 'graduation': 692, 'season': 1412, 'boy': 188, 'girl': 673, 'represented': 1344, 'according': 11, 'federation': 579, 'state': 1530, 'associations': 104, 'illinois': 772, 'particularly': 1150, 'resident': 1351, 'devotion': 412, 'hoosier': 755, 'hysteria': 764, 'critically': 351, 'acclaimed': 8, 'film': 589, 'hoosiers': 756, 'show': 1456, 'depth': 395, 'meaning': 988, 'currently': 364, 'determine': 405, 'champion': 229, 'serious': 1429, 'effort': 487, 'sent': 1424, 'mostly': 1034, 'midwest': 1013, 'affair': 33, 'grew': 698, 'faced': 562, 'opposition': 1113, 'central': 224, 'colleges': 276, 'schools': 1400, 'bore': 178, 'threat': 1625, 'losing': 942, 'accreditation': 12, 'last': 890, 'organization': 1115, 'concerned': 305, 'recruit': 1307, 'prep': 1234, 'rank': 1281, 'invite': 842, 'minority': 1019, 'private': 1245, 'parochial': 1144, 'catholic': 220, 'ran': 1278, 'loyola': 948, 'invitational': 841, 'series': 1428, 'venue': 1728, 'georgetown': 666, 'george': 665, 'mason': 979, 'black': 165, 'held': 734, 'hampton': 717, 'institute': 816, 'starting': 1529, 'tuskegee': 1682, 'following': 612, 'pause': 1161, 'ii': 770, 'resumed': 1360, 'tennessee': 1614, 'nashville': 1055, 'basis': 144, 'dwindled': 472, 'v': 1714, 'board': 171, 'integration': 822, 'alabama': 46, 'teams': 1604, 'abounded': 5, 'hundred': 762, 'town': 1662, 'city': 257, 'little': 932, 'jumped': 861, 'armory': 93, 'smoky': 1481, 'dance': 369, 'hall': 715, 'leagues': 904, 'came': 207, 'went': 1765, 'barnstorming': 139, 'squad': 1520, 'celtics': 222, 'african': 37, 'renaissance': 1337, 'rens': 1339, 'existing': 550, 'harlem': 727, 'globetrotters': 679, 'tour': 1656, 'baa': 126, 'toronto': 1650, 'huskies': 763, 'knickerbockers': 876, 'november': 1083, 'merged': 1001, 'nbl': 1063, 'thus': 1633, 'paving': 1162, 'way': 1755, 'growth': 702, 'interest': 827, 'fame': 568, 'founded': 631, 'site': 1467, 'roster': 1381, 'include': 786, 'referee': 1313, 'people': 1167, 'contributed': 324, 'significantly': 1460, 'development': 410, 'accomplished': 10, 'career': 214, 'upstart': 1706, 'emerged': 495, 'briefly': 193, 'threatened': 1626, 'dominance': 444, 'aba': 1, 'merger': 1002, 'featured': 576, 'famous': 569, 'mikan': 1014, 'big': 162, 'man': 964, 'handling': 722, 'wizard': 1785, 'bob': 172, 'cousy': 340, 'genius': 663, 'bill': 163, 'russell': 1392, 'boston': 179, 'charismatic': 237, 'wilt': 1779, 'chamberlain': 228, 'star': 1527, 'oscar': 1122, 'robertson': 1372, 'jerry': 851, 'west': 1766, 'recent': 1296, 'kareem': 865, 'abdul': 2, 'jabbar': 848, 'shaquille': 1441, 'neal': 1065, 'hakeem': 711, 'olajuwon': 1100, 'karl': 866, 'malone': 963, 'playmaker': 1202, 'john': 854, 'stockton': 1547, 'isiah': 845, 'thomas': 1622, 'steve': 1545, 'nash': 1054, 'pleasing': 1203, 'julius': 859, 'erving': 516, 'charles': 238, 'barkley': 138, 'dirk': 424, 'nowitzki': 1084, 'pau': 1160, 'gasol': 654, 'parker': 1143, 'latin': 894, 'manu': 970, 'ginobili': 672, 'superstar': 1582, 'iverson': 847, 'kobe': 879, 'bryant': 198, 'tim': 1636, 'duncan': 468, 'lebron': 910, 'stephen': 1543, 'curry': 365, 'giannis': 671, 'antetokounmpo': 80, 'etc': 522, 'credit': 347, 'ushering': 1711, 'highest': 740, 'larry': 889, 'bird': 164, 'earvin': 478, 'magic': 954, 'johnson': 855, 'michael': 1010, 'jordan': 857, 'developmental': 411, 'g': 648, 'branding': 189, 'deal': 376, 'gatorade': 656, 'founding': 632, 'argentina': 91, 'czechoslovakia': 368, 'greece': 696, 'italy': 846, 'latvia': 896, 'portugal': 1212, 'romania': 1378, 'switzerland': 1589, 'oversaw': 1134, 'acronym': 14, 'derived': 396, 'french': 636, 'fédération': 647, 'internationale': 832, 'de': 374, 'included': 787, 'berlin': 157, 'summer': 1580, 'olympics': 1103, 'although': 65, 'demonstration': 393, 'defeated': 380, 'final': 590, 'outdoors': 1125, 'dominated': 446, 'whose': 1775, 'title': 1643, 'controversial': 328, 'munich': 1043, 'soviet': 1497, 'ending': 502, 'replayed': 1342, 'chile': 246, 'added': 23, 'montreal': 1033, 'quebec': 1271, 'brazil': 190, 'australia': 117, 'rivaling': 1371, 'allowed': 53, 'prior': 1244, 'south': 1496, 'continued': 320, 'introduction': 838, 'dream': 460, 'athens': 106, 'suffered': 1575, 'loss': 943, 'using': 1712, 'falling': 567, 'puerto': 1265, 'rico': 1364, 'lithuania': 930, 'group': 701, 'eliminated': 492, 'semifinal': 1421, 'bronze': 195, 'medal': 994, 'defeating': 381, 'finishing': 594, 'redeem': 1310, 'gold': 684, 'b': 125, 'turkey': 1679, 'despite': 404, 'featuring': 577, 'worldwide': 1792, 'age': 38, 'global': 677, 'reflected': 1317, 'nationality': 1058, 'inhabited': 809, 'coming': 285, 'mid': 1011, 'croatians': 353, 'dražen': 459, 'petrović': 1181, 'toni': 1646, 'kukoč': 884, 'serbian': 1427, 'vlade': 1743, 'divac': 439, 'lithuanians': 931, 'arvydas': 97, 'sabonis': 1393, 'šarūnas': 1810, 'marčiulionis': 978, 'dutchman': 471, 'rik': 1367, 'smits': 1480, 'german': 667, 'detlef': 406, 'schrempf': 1401, 'philippines': 1183, 'philippine': 1182, 'april': 86, 'araneta': 87, 'coliseum': 272, 'cubao': 359, 'quezon': 1273, 'rebellion': 1288, 'defunct': 389, 'manila': 968, 'industrial': 802, 'commercial': 287, 'tightly': 1635, 'controlled': 326, 'recognized': 1300, 'micaa': 1009, 'participated': 1148, 'opened': 1107, 'pre': 1227, 'eminent': 496, 'commenced': 286, 'september': 1426, 'completion': 304, 'month': 1032, 'shift': 1444, 'current': 363, 'format': 620, 'october': 1093, 'attempt': 111, 'avoid': 120, 'competing': 299, 'directly': 423, 'various': 1722, 'code': 271, 'zealand': 1808, 'luc': 949, 'longley': 937, 'andrew': 75, 'gaze': 658, 'shane': 1439, 'heal': 730, 'chris': 250, 'anstey': 79, 'bogut': 175, 'internationally': 833, 'becoming': 150, 'poster': 1221, 'figure': 586, 'smith': 1479, 'senda': 1422, 'berenson': 155, 'modified': 1028, 'shortly': 1454, 'hired': 743, 'learn': 906, 'fascinated': 573, 'value': 1715, 'teach': 1600, 'march': 975, 'freshman': 639, 'sophomore': 1492, 'interinstitutional': 830, 'california': 203, 'miss': 1021, 'head': 728, 'published': 1264, 'editor': 480, 'spalding': 1498, 'guide': 707, 'mount': 1036, 'holyoke': 750, 'sophie': 1491, 'newcomb': 1075, 'clara': 258, 'gregory': 697, 'baer': 134, 'across': 15, 'country': 338, 'wellesley': 1764, 'vassar': 1726, 'bryn': 199, 'mawr': 984, 'stanford': 1525, 'berkeley': 156, 'victory': 1732, 'structured': 1562, 'executive': 547, 'committee': 290, 'rules': 1387, 'created': 344, 'per': 1168, 'sports': 1513, 'backed': 131, 'complete': 302, 'edmonton': 481, 'grads': 690, 'touring': 1658, 'based': 141, 'alberta': 48, 'operated': 1108, 'toured': 1657, 'exceptionally': 542, 'successful': 1572, 'posted': 1220, 'record': 1302, 'span': 1499, 'met': 1003, 'wanted': 1751, 'challenge': 227, 'funding': 646, 'gate': 655, 'receipt': 1291, 'shone': 1447, 'exhibition': 549, 'trip': 1676, 'europe': 527, 'consecutive': 308, 'unpaid': 1701, 'remain': 1333, 'single': 1466, 'style': 1564, 'overly': 1133, 'emphasizing': 498, 'individual': 799, 'aau': 0, 'chosen': 249, 'sprang': 1514, 'producing': 1248, 'athlete': 107, 'babe': 127, 'didrikson': 416, 'golden': 685, 'cyclones': 367, 'red': 1309, 'heads': 729, 'competed': 297, 'though': 1623, 'shaky': 1438, 'attendance': 114, 'marquee': 977, 'lisa': 928, 'leslie': 915, 'diana': 414, 'taurasi': 1599, 'candace': 212, 'among': 72, 'others': 1123, 'helped': 736, 'folded': 609, 'looked': 939, 'niche': 1077, 'recently': 1297, 'step': 1542, 'june': 863, 'signed': 1458, 'contract': 323, 'extension': 557, 'espn': 517, 'along': 58, 'ever': 533, 'right': 1366, 'fee': 580, 'paid': 1140, 'million': 1016, 'dollar': 443, 'dispersed': 433, 'article': 96, 'commissioner': 288, 'david': 372, 'stern': 1544, 'bad': 133, 'economy': 479, 'profitable': 1251, 'lot': 945, 'money': 1031, 'large': 887, 'number': 1085, 'budgeting': 200, 'even': 530, 'measurements': 992, 'limit': 924, 'discussed': 431, 'section': 1414, 'often': 1099, 'vary': 1724, 'object': 1086, 'outscore': 1129, 'opponent': 1109, 'throwing': 1630, 'beyond': 160, 'arc': 88, 'metre': 1007, 'ft': 641, 'earned': 476, 'awarded': 122, 'non': 1079, 'scoring': 1407, 'endline': 503, 'games': 653, 'quarter': 1270, 'varies': 1720, 'length': 914, 'exchange': 544, 'actual': 21, 'clock': 264, 'stopped': 1550, 'therefore': 1620, 'generally': 661, 'take': 1592, 'much': 1041, 'longer': 936, 'allotted': 51, 'typically': 1685, 'hour': 760, 'substitutions': 1568, 'unlimited': 1699, 'done': 448, 'oversees': 1135, 'strategy': 1555, 'assistant': 102, 'manager': 965, 'statistician': 1534, 'doctor': 441, 'trainer': 1667, 'uniform': 1693, 'consists': 312, 'pair': 1142, 'short': 1451, 'jersey': 852, 'clearly': 262, 'unique': 1695, 'printed': 1243, 'front': 640, 'back': 128, 'wear': 1757, 'sneaker': 1483, 'provide': 1262, 'extra': 559, 'ankle': 77, 'sponsor': 1509, 'stoppage': 1549, 'requested': 1345, 'sometimes': 1488, 'meeting': 996, 'televised': 1609, 'consisting': 311, 'referred': 1316, 'crew': 348, 'chief': 244, 'umpire': 1688, 'table': 1591, 'total': 1652, 'keeping': 868, 'timekeeping': 1639, 'substitution': 1567, 'possession': 1217, 'arrow': 95, 'essential': 518, 'flat': 600, 'surface': 1586, 'opposite': 1112, 'competitive': 301, 'sheet': 1443, 'scoreboard': 1404, 'alternating': 63, 'whistle': 1773, 'system': 1590, 'meter': 1005, 'wide': 1776, 'wood': 1790, 'flooring': 605, 'constructed': 314, 'maple': 974, 'plank': 1193, 'direction': 421, 'dimension': 420, 'logo': 934, 'home': 751, 'painted': 1141, 'circle': 253, 'steel': 1540, 'attached': 110, 'net': 1071, 'affixed': 35, 'measure': 990, 'white': 1774, 'outlined': 1128, 'box': 187, 'almost': 57, 'exactly': 537, 'inside': 815, 'baseline': 142, 'variation': 1717, 'possible': 1218, 'considered': 310, 'important': 778, 'correct': 335, 'height': 733, 'adverse': 31, 'must': 1047, 'check': 240, 'momentarily': 1030, 'aid': 42, 'visual': 1742, 'confirmation': 307, 'act': 16, 'checking': 241, 'advantage': 29, 'slowing': 1475, 'doe': 442, 'regulated': 1323, 'circumference': 254, 'weighs': 1761, 'oz': 1137, 'weight': 1762, 'x': 1799, 'formalized': 619, 'version': 1729, 'halfcourt': 713, 'dedicated': 379, 'mixed': 1024, 'violations': 1737, 'advanced': 28, 'toward': 1660, 'thrown': 1631, 'tapped': 1598, 'rolled': 1377, 'dribbled': 462, 'stay': 1536, 'touch': 1653, 'travel': 1672, 'bound': 184, 'forfeit': 616, 'boundary': 185, 'placed': 1190, 'result': 1357, 'infraction': 808, 'traveling': 1673, 'stopping': 1551, 'giving': 676, 'placing': 1191, 'carrying': 216, 'return': 1362, 'backcourt': 130, 'kicked': 872, 'struck': 1561, 'fist': 596, 'reset': 1350, 'imposed': 779, 'progressing': 1252, 'past': 1156, 'halfway': 714, 'sex': 1437, 'attempting': 113, 'holding': 748, 'closely': 266, 'guarded': 704, 'remaining': 1334, 'restricted': 1356, 'lane': 886, 'key': 870, 'designed': 402, 'help': 735, 'goaltending': 683, 'touching': 1655, 'downward': 453, 'flight': 602, 'related': 1328, 'reaching': 1284, 'committed': 289, 'awarding': 123, 'cancelling': 211, 'case': 217, 'fouls': 629, 'unfairly': 1691, 'disadvantage': 426, 'certain': 226, 'type': 1684, 'contact': 316, 'illegal': 771, 'personal': 1179, 'receive': 1292, 'inbounds': 782, 'depending': 394, 'whether': 1771, 'making': 961, 'attempted': 112, 'judging': 858, 'controversy': 329, 'calling': 206, 'category': 219, 'charged': 236, 'failure': 565, 'properly': 1258, 'scorebook': 1405, 'unsportsmanlike': 1704, 'conduct': 306, 'repeated': 1340, 'incident': 785, 'disqualification': 434, 'blatant': 167, 'involving': 844, 'excessive': 543, 'unnecessary': 1700, 'intentional': 824, 'flagrant': 599, 'ejection': 489, 'disqualifying': 435, 'exceeds': 540, 'subsequent': 1566, 'us': 1708, 'reach': 1283, 'shooter': 1449, 'regain': 1319, 'potentially': 1222, 'air': 43, 'specified': 1503, 'bonus': 177, 'signified': 1461, 'indicator': 798, 'light': 920, 'reading': 1286, 'penalty': 1165, 'illuminated': 773, 'directional': 422, 'dot': 450, 'indicating': 797, 'situation': 1468, 'wait': 1747, 'reclaim': 1298, 'continuing': 321, 'unsuccessful': 1705, 'equal': 514, 'regular': 1321, 'receives': 1294, 'combination': 282, 'colloquially': 278, 'technique': 1607, 'practice': 1225, 'positions': 1216, 'specify': 1504, 'whatsoever': 1767, 'evolution': 535, 'specific': 1501, 'trend': 1674, 'advocated': 32, 'mike': 1015, 'krzyzewski': 883, 'towards': 1661, 'positionless': 1215, 'allows': 55, 'description': 399, 'fastest': 574, 'organizes': 1118, 'controlling': 327, 'sure': 1585, 'get': 668, 'creates': 345, 'volume': 1745, 'mainly': 957, 'ranged': 1280, 'perimeter': 1174, 'primarily': 1241, 'via': 1731, 'cut': 366, 'penetration': 1166, 'seek': 1416, 'actively': 19, 'offensively': 1096, 'zone': 1809, 'flexible': 601, 'similar': 1463, 'responsibility': 1353, 'wing': 1781, 'post': 1219, 'describe': 397, 'occasion': 1089, 'choose': 248, 'different': 418, 'designation': 401, 'assigned': 101, 'manoeuver': 969, 'trap': 1671, 'varied': 1719, 'normally': 1080, 'planned': 1194, 'quick': 1274, 'legal': 912, 'guarding': 705, 'standing': 1524, 'next': 1076, 'screen': 1409, 'pick': 1187, 'combined': 283, 'roll': 1376, 'away': 124, 'screens': 1410, 'teamwork': 1605, 'lead': 901, 'always': 66, 'ensure': 510, 'predictable': 1229, 'occur': 1091, 'varying': 1725, 'face': 561, 'facing': 563, 'rest': 1355, 'fingertip': 593, 'dominant': 445, 'arm': 92, 'supporting': 1584, 'jumping': 862, 'extending': 556, 'fully': 643, 'extended': 555, 'wrist': 1795, 'bent': 154, 'stationary': 1533, 'moment': 1029, 'release': 1330, 'follow': 610, 'put': 1268, 'steady': 1537, 'backspin': 132, 'absorb': 6, 'impact': 774, 'trajectory': 1669, 'somewhat': 1489, 'recommended': 1301, 'redirect': 1311, 'described': 398, 'setup': 1434, 'preceded': 1228, 'crouching': 355, 'action': 17, 'preloads': 1232, 'muscle': 1045, 'increase': 791, 'straightens': 1554, 'neither': 1069, 'leaving': 909, 'floor': 604, 'released': 1331, 'near': 1066, 'provides': 1263, 'greater': 695, 'range': 1279, 'elevate': 490, 'requires': 1348, 'motion': 1035, 'lay': 898, 'underhand': 1690, 'finger': 592, 'percentage': 1169, 'accuracy': 13, 'slam': 1472, 'circus': 255, 'low': 946, 'heaved': 732, 'scooped': 1402, 'flung': 606, 'balance': 135, 'airborne': 44, 'chance': 233, 'completely': 303, 'hit': 746, 'jocularly': 853, 'brick': 192, 'hang': 724, 'make': 960, 'rebounding': 1290, 'successfully': 1573, 'role': 1375, 'recovered': 1305, 'defending': 385, 'loose': 941, 'majority': 959, 'tends': 1613, 'better': 159, 'recover': 1304, 'example': 539, 'moving': 1040, 'accompanied': 9, 'followed': 611, 'staple': 1526, 'chest': 242, 'passer': 1154, 'receiver': 1293, 'involves': 843, 'outward': 1131, 'snap': 1482, 'thumb': 1632, 'add': 22, 'velocity': 1727, 'leaf': 902, 'defence': 382, 'react': 1285, 'crisply': 350, 'thirds': 1621, 'strike': 1559, 'harder': 726, 'kicking': 873, 'deliberately': 391, 'crowded': 357, 'overhead': 1132, 'outlet': 1127, 'occurs': 1092, 'crucial': 358, 'aspect': 100, 'difficult': 419, 'know': 877, 'prefers': 1231, 'special': 1500, 'looking': 940, 'receiving': 1295, 'look': 938, 'implies': 777, 'perform': 1170, 'effectively': 486, 'discourage': 428, 'believing': 153, 'likely': 923, 'turnover': 1681, 'continuously': 322, 'push': 1267, 'ground': 700, 'rather': 1282, 'patting': 1159, 'ensures': 511, 'farthest': 572, 'able': 4, 'competently': 298, 'tend': 1612, 'reducing': 1312, 'distance': 436, 'frequently': 638, 'leg': 911, 'switch': 1588, 'suddenly': 1574, 'pattern': 1158, 'defend': 383, 'crossover': 354, 'effective': 485, 'move': 1038, 'skilled': 1471, 'watching': 1754, 'peripheral': 1176, 'vision': 1740, 'location': 933, 'focus': 607, 'opportunity': 1110, 'danger': 370, 'someone': 1487, 'blocking': 170, 'performed': 1172, 'succeeds': 1570, 'altering': 62, 'variant': 1716, 'path': 1157, 'touched': 1654, 'taller': 1596, 'timing': 1641, 'sufficiently': 1576, 'vertical': 1730, 'leap': 905, 'blocker': 169, 'male': 962, 'guards': 706, 'coordination': 332, 'smallest': 1478, 'tall': 1595, 'survey': 1587, 'average': 118, 'pound': 1223, 'kg': 871, 'manute': 972, 'bol': 176, 'gheorghe': 670, 'mureșan': 1044, 'margo': 976, 'dydek': 473, 'muggsy': 1042, 'bogues': 174, 'relatively': 1329, 'thrived': 1627, 'anthony': 81, 'spud': 1518, 'webb': 1759, 'temeka': 1611, 'rookie': 1379, 'award': 121, 'phoenix': 1184, 'mercury': 999, 'ability': 3, 'navigate': 1061, 'strength': 1557, 'regularly': 1322, 'inflate': 804, 'prospect': 1259, 'exaggerate': 538, 'appealing': 83, 'scout': 1408, 'prefer': 1230, 'stated': 1531, 'measured': 991, 'sam': 1396, 'former': 622, 'writer': 1796, 'tribune': 1675, 'sort': 1493, 'camp': 208, 'come': 284, 'mad': 952, 'hear': 731, 'agent': 39, 'file': 587, 'story': 1553, 'copy': 333, 'desk': 403, 'medium': 995, 'wrong': 1797, 'joke': 856, 'since': 1464, 'recorded': 1303, 'definitively': 388, 'measuring': 993, 'shoe': 1446, 'variations': 1718, 'activity': 20, 'superficial': 1581, 'distinct': 437, 'degree': 390, 'influence': 805, 'contest': 317, 'reinforce': 1326, 'earlier': 474, 'horseball': 758, 'horseback': 757, 'handled': 720, 'polo': 1206, 'rugby': 1385, 'donkey': 449, 'attracted': 116, 'criticism': 352, 'animal': 76, 'informal': 806, 'setting': 1432, 'strict': 1558, 'cleared': 261, 'cardiovascular': 213, 'stamen': 1522, 'need': 1067, 'run': 1388, 'forth': 625, 'full': 642, 'raise': 1277, 'conversely': 331, 'insufficient': 820, 'latter': 895, 'gradually': 691, 'gaining': 650, 'tested': 1616, 'asian': 98, 'macau': 950, 'youth': 1807, 'singapore': 1465, 'championships': 232, 'rimini': 1369, 'senior': 1423, 'highly': 741, 'tipped': 1642, 'page': 1139, 'subsection': 1565, 'emphasize': 497, 'stealing': 1539, 'hoops': 754, 'lowered': 947, 'originated': 1121, 'developed': 408, 'create': 343, 'altered': 61, 'unicycle': 1692, 'riding': 1365, 'particular': 1149, 'least': 908, 'pedal': 1164, 'bounding': 186, 'plastic': 1196, 'preserve': 1237, 'shin': 1445, 'spin': 1507, 'offs': 1098, 'separate': 1425, 'ringball': 1370, 'traditional': 1665, 'stem': 1541, 'promoted': 1254, 'africa': 36, 'namibia': 1053, 'botswana': 180, 'lesotho': 916, 'india': 794, 'mauritius': 983, 'establish': 519, 'korfball': 882, 'dutch': 470, 'korfbal': 881, 'korf': 880, 'netherlands': 1073, 'gender': 659, 'netball': 1072, 'anz': 82, 'premier': 1233, 'formerly': 623, 'exclusively': 545, 'slamball': 1473, 'gordon': 687, 'trampoline': 1670, 'difference': 417, 'padded': 1138, 'serve': 1430, 'propel': 1256, 'permit': 1177, 'member': 997, 'aired': 45, 'spike': 1506, 'tv': 1683, 'expanded': 552, 'china': 247, 'social': 1485, 'communal': 293, 'environment': 513, 'demographic': 392, 'seen': 1418, 'recreational': 1306, 'extracurricular': 560, 'intramural': 836, 'notable': 1082, 'institution': 817, 'trained': 1666, 'fundamental': 645, 'undergo': 1689, 'endurance': 505, 'exercise': 548, 'ethic': 523, 'prepared': 1235, 'clinic': 263, 'improving': 781, 'educational': 483, 'learning': 907, 'includes': 788, 'disabled': 425, 'deaf': 375, 'relies': 1332, 'signing': 1462, 'communication': 294, 'sporting': 1512, 'happens': 725, 'purpose': 1266, 'catalyst': 218, 'socialization': 1486, 'incidence': 784, 'geographically': 664, 'population': 1211, 'wheelchair': 1768, 'practiced': 1226, 'functional': 644, 'classification': 260, 'reflects': 1318, 'performance': 1171, 'elite': 493, 'female': 581, 'give': 674, 'analysis': 74, 'resource': 1352, 'testing': 1617, 'observation': 1088, 'process': 1247, 'biddy': 161, 'minor': 1018, 'formal': 618, 'globe': 678, 'gay': 657, 'lgbtqia': 918, 'outgames': 1126, 'eurogames': 525, 'midnight': 1012, 'initiative': 811, 'curb': 361, 'inner': 813, 'crime': 349, 'elsewhere': 494, 'engaging': 506, 'urban': 1707, 'alternative': 64, 'drug': 465, 'rezball': 1363, 'reservation': 1349, 'avid': 119, 'native': 1059, 'fantasy': 570, 'popularized': 1210, 'com': 281, 'yahoo': 1800, 'model': 1026, 'baseball': 140, 'fictional': 583, 'select': 1420, 'mock': 1025, 'draft': 456, 'trade': 1664, 'calculate': 202, 'real': 1287, 'see': 1415, 'glossary': 680, 'index': 793, 'list': 929, 'timeline': 1640, 'uleb': 1687, 'ligues': 921, 'européennes': 529, 'english': 508, 'references': 1315, 'citations': 256, 'general': 660, 'reference': 1314, 'external': 558, 'link': 927, 'historical': 744, 'foundation': 630, 'museum': 1046, 'hometown': 752, 'heroes': 737, 'organizations': 1116, 'oldest': 1101, 'source': 1495, 'encyclopædia': 499, 'britannica': 194, 'online': 1104, 'curlie': 362, 'website': 1760, 'statistics': 1535, 'archived': 89, 'wayback': 1756, 'machine': 951, 'plaques': 1195, 'dr': 455}
+col_names= ['aau' 'aba' 'abdul' ... 'zealand' 'zone' 'šarūnas']
+SPARSE MATRIX
+   (0, 146) 1
+  (3, 1602) 1
+  (4, 1511) 1
+  (8, 1602) 1
+  (11, 292) 1
+  (14, 1199)    1
+  (17, 1111)    1
+  (19, 78)  1
+  (22, 1308)    1
+  (23, 339) 1
+  (25, 296) 1
+  (28, 1242)    1
+  (29, 1087)    1
+  (31, 1450)    1
+  (33, 146) 1
+  (35, 85)  1
+  (37, 783) 1
+  (40, 268) 1
+  (43, 413) 1
+  (47, 384) 1
+  (49, 753) 1
+  (52, 145) 1
+  (54, 783) 1
+  (57, 268) 1
+  (60, 413) 1
+  : :
+  (10958, 146)  1
+  (10961, 499)  1
+  (10962, 194)  1
+  (10963, 1104) 1
+  (10965, 146)  1
+  (10967, 362)  1
+  (10968, 524)  1
+  (10969, 1760) 1
+  (10970, 146)  1
+  (10970, 281)  1
+  (10970, 1314) 1
+  (10972, 146)  1
+  (10973, 1535) 1
+  (10975, 74)   1
+  (10977, 745)  1
+  (10978, 89)   1
+  (10979, 578)  1
+  (10986, 1756) 1
+  (10987, 951)  1
+  (10988, 1105) 1
+  (10990, 744)  1
+  (10991, 1195) 1
+  (10993, 455)  1
+  (10994, 849)  1
+  (10995, 1051) 1
+[[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]</code></pre>
+</div>
+</div>
+</section>
+<section id="news-api-cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="news-api-cleaning">News API cleaning</h3>
+<p>First, I use regular expressions (regex) to replace multiple copies of punctuation and extra spaces with a single space. This step helps remove unnecessary punctuation and spacing. Next, I remove specific characters like smart quotes (’), which might not be desired in the text. Then, I eliminate duplicate whitespace characters using wildcards, ensuring that words are separated by only one space. Finally, I convert all the text to lowercase for consistency. I apply this string_cleaner function to clean text data from a list of articles, specifically the “title” and “description” fields. The cleaned text is stored in the “cleaned_data” list, which is much better suited for text analysis than the uncleaned data.</p>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#news API</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>baseURL <span class="op">=</span> <span class="st">"https://newsapi.org/v2/everything?"</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>total_requests<span class="op">=</span><span class="dv">2</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>verbose<span class="op">=</span><span class="va">True</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>API_KEY<span class="op">=</span><span class="st">'306919e989964d6ba9f61a0b153c64ba'</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>TOPIC<span class="op">=</span><span class="st">'Basketball'</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Query</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>URLpost <span class="op">=</span> {<span class="st">'apiKey'</span>: API_KEY,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>            <span class="st">'q'</span>: <span class="st">'+'</span><span class="op">+</span>TOPIC,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>            <span class="st">'sortBy'</span>: <span class="st">'relevancy'</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">'totalRequests'</span>: <span class="dv">1</span>}</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(baseURL, URLpost) <span class="co">#request data from the server</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> response.json() <span class="co">#extract txt data from request into json</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>timestamp <span class="op">=</span> datetime.now().strftime(<span class="st">"%Y-%m-</span><span class="sc">%d</span><span class="st">-H%H-M%M-S%S"</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(timestamp<span class="op">+</span><span class="st">'-newapi-raw-data.json'</span>, <span class="st">'w'</span>) <span class="im">as</span> outfile:</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    json.dump(response, outfile, indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#cleaning funtion</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> string_cleaner(input_string):</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>: </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        out<span class="op">=</span>re.sub(<span class="vs">r"""</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="vs">                    [,.;@#?!&amp;$-]+  </span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="vs">                    \ *           </span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="vs">                    """</span>,</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>                    <span class="st">" "</span>,          </span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>                    input_string, flags<span class="op">=</span>re.VERBOSE)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> re.sub(<span class="st">'[’.]+'</span>, <span class="st">''</span>, input_string)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>        out <span class="op">=</span> re.sub(<span class="vs">r'\s+'</span>, <span class="st">' '</span>, out)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>        out<span class="op">=</span>out.lower()</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span>:</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"ERROR"</span>)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>        out<span class="op">=</span><span class="st">''</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co">#cleaning</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>article_list<span class="op">=</span>response[<span class="st">'articles'</span>]  </span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>article_keys<span class="op">=</span>article_list[<span class="dv">0</span>].keys()</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>index<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>cleaned_data<span class="op">=</span>[]<span class="op">;</span>  </span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> article <span class="kw">in</span> article_list:</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    tmp<span class="op">=</span>[]</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key <span class="kw">in</span> article_keys:</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(key<span class="op">==</span><span class="st">'title'</span>):</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>            tmp.append(string_cleaner(article[key]))</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(key<span class="op">==</span><span class="st">'description'</span>):</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>             tmp.append(string_cleaner(article[key]))</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    cleaned_data.append(tmp)</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    index<span class="op">+=</span><span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
