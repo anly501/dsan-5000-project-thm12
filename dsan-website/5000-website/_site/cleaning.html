@@ -151,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data.html" class="sidebar-item-text sidebar-link">
+  <a href="https://github.com/anly501/dsan-5000-project-thm12/tree/main/data" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data</span></a>
   </div>
 </li>
@@ -249,22 +249,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="cleaning-nba-combine-data" class="level3">
 <h3 class="anchored" data-anchor-id="cleaning-nba-combine-data">Cleaning NBA combine data</h3>
-<p>I cleaned this data with the intent to merge it with NBA player season data. The first thing I had to do with the NBA combine data was adjust the format of the player name column. I changed the format from (Last, First) to (First Last) using strsplit and sapply in R. I also changed the name of the column from “PLAYER” to “Name” so that can merge the dataset by “Name”. I then renamed some other columns to be more clear, and dropped those that were not needed. This dataset was relatively clean to begin with, so only only a few minor adjustments were needed.</p>
-<p>Link to code</p>
+<p>I cleaned this data with the intent to merge it with NBA player season data. The first thing I had to do with the NBA combine data was adjust the format of the player name column. I changed the format from (Last, First) to (First Last) using strsplit and sapply in R. I also changed the name of the column from “PLAYER” to “Name” so that can merge the dataset by “Name”. I then renamed some other columns to be more clear, and dropped those that were not needed. This dataset was relatively clean to begin with, so only a few minor adjustments were needed.</p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/codes/01-data-gathering/data_gathering%26cleaning.Rmd">Link to code</a></p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/data/01-modified-data/cleaned_nba_combine.csv">Link to data</a></p>
 </section>
 <section id="cleaning-nba-player-season" class="level3">
 <h3 class="anchored" data-anchor-id="cleaning-nba-player-season">Cleaning NBA player season</h3>
-<p>I cleaned and subsetting the The NBA player season data to merge it with the combine data. The dataset had duplicate player values for each season. I subsetted the data to only keep one value for each player in order to merge with the NBA combine dataset. I wanted to keep the version of each player in which they had their best seasopn. I did this by keeping the version of each player that had the the most points for the season. Points are generally the most important stat in basketball, and while assists and rebounds are important, total points should be a good indicator of a season in which a player had one of their best years and remained healthy enough to play most of the season. I then deleted a pleathura of columns that would not be useful in indicating in game performance.</p>
-<p>Link to code</p>
+<p>I cleaned and subsetting the NBA player season data to merge it with the combine data. The dataset had duplicate player values for each season. I subsetted the data to only keep one value for each player in order to merge with the NBA combine dataset. I wanted to keep the version of each player in which they had their best season. I did this by keeping the version of each player that had the the most points for the season. Points are generally the most important stat in basketball, and while assists and rebounds are important, total points should be a good indicator of a season in which a player had one of their best years and remained healthy enough to play most of the season. I then deleted a pleathura of columns that would not be useful in indicating in game performance.</p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/codes/01-data-gathering/data_gathering%26cleaning.Rmd">Link to code</a></p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/data/01-modified-data/cleaned_best_NBA_season_player.csv">Link to data</a></p>
 </section>
 <section id="merging-nba-combine-and-player-season-data" class="level3">
 <h3 class="anchored" data-anchor-id="merging-nba-combine-and-player-season-data">Merging NBA combine and player season data</h3>
-<p>I then merged the subset player season dataset with the NBA combine dataset. I did a full join by Player name in R.</p>
-<p>Link to code</p>
+<p>I then merged the subset player season dataset with the NBA combine dataset. I used a full join by Player name in R. I then removed values that did not have combine data by removing rows that did not have a value for “combine_year”.</p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/codes/01-data-gathering/data_gathering%26cleaning.Rmd">Link to code</a></p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/data/01-modified-data/cleaned_NBA_combined.csv">Link to data</a></p>
 </section>
 <section id="cleaning-olympic-track-and-field-data" class="level3">
 <h3 class="anchored" data-anchor-id="cleaning-olympic-track-and-field-data">Cleaning Olympic Track and Field data</h3>
 <p>The Olympic Track and Field dataset was already pretty clean, so I just created a subset that only included the High jump event. I then renamed the result column to Best Height (m).</p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/data/01-modified-data/cleaned_high_jump.csv">Link to data</a></p>
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -309,11 +313,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="cleaning-nfl-combine-data" class="level3">
 <h3 class="anchored" data-anchor-id="cleaning-nfl-combine-data">Cleaning NFL combine data</h3>
-<p>The NFL combine data was also already pretty clean, so I only made a few adjustments. I discarded values that did not have a result for standing vertical jump. Some prospects opt out of certain events and tests, but I am really only interested at looking at vertical jump for comparison to NBA prospests, so the prospects who did not test were removed from the dataset. I then disarded values that served as dataset IDs and therefore had no significance for analysis. I finally changed the column name for “Vertical” to “STANDING.VERTICAL” so it will be easier to join and conduct analysis with the NBA combine dataset in the future.</p>
+<p>The NFL combine data was also already pretty clean, so I only made a few adjustments. I discarded values that did not have a result for standing vertical jump. Some prospects opt out of certain events and tests, but I am really only interested at looking at vertical jump for comparison to NBA prospests, so the prospects who did not test for that event were removed from the dataset. I then disarded values that served as dataset IDs and therefore had no significance for analysis. I finally changed the column name for “Vertical” to “STANDING.VERTICAL” so it will be easier to join and conduct analysis with the NBA combine dataset in the future.</p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/codes/01-data-gathering/data_gathering%26cleaning.Rmd">Link to code</a></p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/data/01-modified-data/cleaned_NFL_combine.csv">Link to data</a></p>
 </section>
 <section id="cleaning-stretching-study-data" class="level3">
 <h3 class="anchored" data-anchor-id="cleaning-stretching-study-data">Cleaning Stretching Study data</h3>
 <p>For the stretching data I changed the column “SerialNo.” to “Participant number”, and then changed the values in the gender column to Male or Female rather than 1 or 2.</p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/data/01-modified-data/cleaned_stretching.csv">Link to data</a></p>
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#clean stretching data</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>stretching<span class="op">=</span> pd.read_csv(<span class="st">"../../data/00-raw-data/stretching.csv"</span>)</span>
@@ -349,7 +356,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Text cleaning</h1>
 <section id="wikipedia-api-data-cleaning" class="level3">
 <h3 class="anchored" data-anchor-id="wikipedia-api-data-cleaning">Wikipedia APi data cleaning</h3>
-<div class="cell" data-execution_count="83">
+<p>I cleaned the text data by turning the text into a corpus and list of tokens, I then cleaned the tokens by lemmatizing them and removing digits. I also added written out numbers to the list of stopwords. I then vectorized the tokens and created a sparse matix of the tokens as well as an array.</p>
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Wikipedia api</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -466,20 +474,13 @@ SPARSE MATRIX
   (10991, 1195) 1
   (10993, 455)  1
   (10994, 849)  1
-  (10995, 1051) 1
-[[0 0 0 ... 0 0 0]
- [0 0 0 ... 0 0 0]
- [0 0 0 ... 0 0 0]
- ...
- [0 0 0 ... 0 0 0]
- [0 0 0 ... 0 0 0]
- [0 0 0 ... 0 0 0]]</code></pre>
+  (10995, 1051) 1</code></pre>
 </div>
 </div>
 </section>
 <section id="news-api-cleaning" class="level3">
 <h3 class="anchored" data-anchor-id="news-api-cleaning">News API cleaning</h3>
-<p>First, I use regular expressions (regex) to replace multiple copies of punctuation and extra spaces with a single space. This step helps remove unnecessary punctuation and spacing. Next, I remove specific characters like smart quotes (’), which might not be desired in the text. Then, I eliminate duplicate whitespace characters using wildcards, ensuring that words are separated by only one space. Finally, I convert all the text to lowercase for consistency. I apply this string_cleaner function to clean text data from a list of articles, specifically the “title” and “description” fields. The cleaned text is stored in the “cleaned_data” list, which is much better suited for text analysis than the uncleaned data.</p>
+<p>For this text data I created a string cleaning function did a varitey of things to the text, including replacing multiple copies of punctuation and extra spaces with a single space, removing specific characters like quotes, eliminating duplicate whitespace characters, and converting all the text to lowercase. I applied the function to clean text data from a list of articles, specifically in the “title” and “description” fields. The cleaned text was then stored in the “cleaned_data” list.</p>
 <div class="cell" data-execution_count="39">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#news API</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>

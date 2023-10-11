@@ -11,7 +11,7 @@ website:
         text: About me
       - href: https://github.com/anly501/dsan-5000-project-thm12
         text: Code
-      - href: data.qmd
+      - href: https://github.com/anly501/dsan-5000-project-thm12/tree/main/data
         text: Data
       - href: gathering.ipynb
         text: Data Gathering
