@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -59,6 +93,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 </head>
@@ -181,7 +218,27 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#theory" id="toc-theory" class="nav-link" data-scroll-target="#theory">Theory</a></li>
+  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering">K-Means CLustering</a>
+  <ul class="collapse">
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
+  </ul></li>
+  <li><a href="#dbscan-clustering" id="toc-dbscan-clustering" class="nav-link" data-scroll-target="#dbscan-clustering">DBSCAN Clustering</a>
+  <ul class="collapse">
+  <li><a href="#analysis-1" id="toc-analysis-1" class="nav-link" data-scroll-target="#analysis-1">Analysis</a></li>
+  </ul></li>
+  <li><a href="#hierarchical-clustering" id="toc-hierarchical-clustering" class="nav-link" data-scroll-target="#hierarchical-clustering">Hierarchical Clustering</a>
+  <ul class="collapse">
+  <li><a href="#analysis-2" id="toc-analysis-2" class="nav-link" data-scroll-target="#analysis-2">Analysis</a></li>
+  </ul></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -203,9 +260,424 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Build out your website tab for “clustering”</p>
+<section id="introduction" class="level3">
+<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<p>In this section I will be performing clustering using three different types of clustering. Clustering is an unsupervised learning technique that aims to discover groups or clusters within unlabeled data based on similarity or distance in a feature space. The main goal is to reveal the internal structure of the data, aiding in knowledge discovery through pattern identification and facilitating subset selection to manage large datasets. For this project I will be performing clustering on the NBA combine dataset without label features. Through this analysis, I hope to see if new insights can be revealed about the NBA combine event results and their relation to vertical jump through clustering.</p>
+</section>
+<section id="theory" class="level3">
+<h3 class="anchored" data-anchor-id="theory">Theory</h3>
+<p>I will now be explaining the three clustering methods I will be using: K-means, DBSCAN, and Hierarchical.</p>
+<p>K-means clustering uses an algorithm to cluster and group data points based on centroids or the center of a cluster. K-means creates clusters based on a set k clusters, where the centroid is the mean of the data points in a given cluster. It does this by repeatedly assigning points to the nearest centroid, adjusting the centroids, and repeating until the data is divided into k clusters based on their average locations. Parameters for the model can be tuned and selected in a variety of ways including the elbow method and silhouette analysis. The elbow method is done by running K-means for various k values, and plotting metrics like distortion, inertia, and silhouette score, and identifying the “elbow” point in the plot where increasing k yields diminishingly better results as the optimal k. Silhouette Analysis measures cohesion and separation, yielding a silhouette score to identify the optimal number of clusters.</p>
+<p>DBSCAN or Density-Based Spatial Clustering of Applications with Noise is a density-based cluster identification method that recognizes clusters as dense point regions separated by low-density areas from other high-density regions. DBSCAN is an algorithm that groups closely packed points based on their proximity, identifying outliers as points in low-density regions with distant neighbors. This clustering method is useful for irregular or intertwined clusters and datasets that have a lot of noise and outliers. The elbow and silhouette method can also be used to tune parameters for the model, like eps and minimum sample size.In DBSCAN eps defines the maximum distance between two points for one to be considered in the neighborhood of the other, while the minimum sample size parameter the minimum number of points required to form a region. These can be graphed with the corresponding silhouette score and the model can be tuned accordingly.</p>
+<p>Hierarchical clustering organizes data into nested clusters, forming a hierarchical tree-like structure. It doesn’t assume a predetermined number of clusters as k-means does. In the agglomerative approach, which I will be using in this section. Each observation begins in its own cluster, and clusters are progressively merged as one ascends the hierarchy in a bottom-up fashion. A useful tool for visualizing and selecting the number of clusters for agglomerative clustering is through a dendrogram. A dendrogram is a tree-like diagram that represents the hierarchical structure of clusters in hierarchical clustering, showcasing the order and manner in which clusters merge, going up from each individual datapoint. It can show where there are natural breaks in clusters along different differences, which can be very useful for selecting the number of clusters to have.</p>
+</section>
+<section id="k-means-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="k-means-clustering">K-Means CLustering</h2>
+<p>For K-means clustering, I used the NBA combine dataset without label features as X. I normalized X, and tuned for the optimal number of clusters by using the elbow method. I did this by looping through values for the number of clusters, and plotted the resulting distortion and inertia. I then found the elbow point in the graph where both were minimized and increasing the number of clusters would produce diminishing lower values for inertia and distortion. I then plotted the clusters as colors on a scatter plot with ‘body fat’ and ‘three quarter sprint speed’ as the x and y axis. I chose to plot the clusters with these features since these two features were the two selected when I performed feature selection for the best two features in the Naive Bayes section.</p>
+<div class="cell" data-execution_count="185">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans, AgglomerativeClustering, DBSCAN</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestNeighbors</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_score</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> pd.read_csv(<span class="st">"../../../data/01-modified-data/cleaned_NBA_combine.csv"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> combine_df[combine_df[<span class="st">"combine_year"</span>]<span class="op">&gt;</span><span class="dv">2009</span>]</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> combine_df.dropna()</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>max_vert_mean <span class="op">=</span> combine_df[<span class="st">"MAX.VERTICAL"</span>].mean()</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>combine_df[<span class="st">"above_max_vert_mean"</span>] <span class="op">=</span> (combine_df[<span class="st">"MAX.VERTICAL"</span>]<span class="op">&gt;</span> max_vert_mean).astype(<span class="bu">int</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>label_vec <span class="op">=</span> combine_df[<span class="st">"above_max_vert_mean"</span>]</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>drop_cols <span class="op">=</span> [<span class="st">"Unnamed: 0"</span>, <span class="st">"POS"</span>, <span class="st">"combine_year"</span>, <span class="st">"Name"</span>]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>feature_matrix <span class="op">=</span> combine_df.drop(columns<span class="op">=</span> drop_cols)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>db_matrix <span class="op">=</span> feature_matrix[[<span class="st">'BODY.FAT'</span>, <span class="st">'THREE.QUARTER.SPRINT'</span>]]</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>feature_cols <span class="op">=</span> feature_matrix.columns.tolist()</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> feature_matrix</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>X_normalized <span class="op">=</span> scaler.fit_transform(X)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>db_X <span class="op">=</span> db_matrix</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>db_X_normalized <span class="op">=</span> scaler.fit_transform(db_X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-execution_count="220">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>clusters <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">10</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>kmeans_list <span class="op">=</span> []</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>inertia_list <span class="op">=</span> []</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>distortion_list <span class="op">=</span> []</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> clusters:</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span>k, n_init<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    kmeans.fit(X_normalized)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    centroids <span class="op">=</span> kmeans.cluster_centers_</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    labels <span class="op">=</span> kmeans.labels_</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    distortion <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(X_normalized)):</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        cluster_index <span class="op">=</span> labels[i]</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        distortion <span class="op">+=</span> np.linalg.norm(X_normalized[i]<span class="op">-</span>centroids[cluster_index])<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    distortion <span class="op">/=</span> <span class="bu">len</span>(X_normalized)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    distortion_list.append(distortion)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    inertia <span class="op">=</span> kmeans.inertia_</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    kmeans_list.append(k)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    inertia_list.append(inertia)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"Clusters"</span>: kmeans_list, <span class="st">"Distortion"</span>: distortion_list, <span class="st">"Inertia"</span>: inertia_list})</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>df.head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="220">
+<div>
 
 
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Clusters</th>
+<th data-quarto-table-cell-role="th">Distortion</th>
+<th data-quarto-table-cell-role="th">Inertia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>18.000000</td>
+<td>4086.000000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>13.396373</td>
+<td>3040.976684</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>11.664875</td>
+<td>2647.926702</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>10.489848</td>
+<td>2381.195597</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>9.899263</td>
+<td>2247.132813</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>6</td>
+<td>9.424941</td>
+<td>2139.461719</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>7</td>
+<td>8.994443</td>
+<td>2041.738467</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>8</td>
+<td>8.582387</td>
+<td>1948.201760</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>9</td>
+<td>8.273089</td>
+<td>1877.991115</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="172">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(df[<span class="st">'Clusters'</span>], df[<span class="st">'Inertia'</span>])</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">'Number of Clusters'</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">'Inertia'</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(df[<span class="st">'Clusters'</span>], df[<span class="st">'Distortion'</span>])</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlabel(<span class="st">'Number of Clusters'</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">'Distortion'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="172">
+<pre><code>Text(0, 0.5, 'Distortion')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="clustering_files/figure-html/cell-4-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="218">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>optimal_k <span class="op">=</span> <span class="dv">5</span>  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>kmeans <span class="op">=</span> KMeans(n_clusters<span class="op">=</span> optimal_k, n_init<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>kmeans.fit(X_normalized)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> kmeans.predict(X_normalized)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>centroids <span class="op">=</span> kmeans.cluster_centers_</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> kmeans.labels_</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>k_df <span class="op">=</span> pd.DataFrame(X_normalized, columns<span class="op">=</span>feature_cols)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>k_df[<span class="st">'cluster_label'</span>] <span class="op">=</span> y_pred</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(k_df)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>       HEIGHT    WEIGHT       BMI  BODY.FAT  STANDING.REACH  WINGSPAN  \
+0    0.769218 -0.124133 -1.043761 -1.416146        0.827347  0.440841   
+1   -1.130396 -1.386806 -0.901057 -0.750390       -1.627656 -1.774516   
+2    0.313311 -0.484897 -1.089426 -0.037080        0.009012 -0.065527   
+3   -1.282365 -1.292321 -0.552860 -0.797944       -1.013905 -0.825078   
+4    0.161342  0.408423  0.463190 -0.274850       -0.195571 -0.255414   
+..        ...       ...       ...       ...             ...       ...   
+222  0.541264  0.399833 -0.010586  0.723785        0.622763  0.694024   
+223 -0.142597  0.880852  1.593403  0.438461       -0.809322  0.694024   
+224 -0.066612  0.365475  0.680099  1.199325        0.213596 -0.065527   
+225  1.681032  0.451371 -1.197881  1.009109        1.543389  0.947208   
+226  1.681032  0.803545 -0.718397 -0.845498        0.622763  0.124361   
+
+     HAND.LENGTH  HAND.WIDTH  STANDING.VERTICAL  MAX.VERTICAL  LANE.AGILITY  \
+0       0.592763    0.582597           0.240656      0.326839     -0.322871   
+1      -2.353744   -0.160378           2.081707      1.858015     -2.274532   
+2      -0.389406    0.582597           0.742761     -0.090755     -0.514552   
+3      -0.880490   -0.606163          -0.763553     -0.786744     -0.288020   
+4       0.101678    0.136812           0.408025      0.187641     -0.375148   
+..           ...         ...                ...           ...           ...   
+222    -1.371575    0.136812          -0.261448     -1.065139     -0.653957   
+223     1.083847    0.136812           1.579602      1.301224      0.635533   
+224    -1.371575   -0.903353          -0.428817     -1.065139      2.900853   
+225     0.592763    0.582597          -1.098289     -1.900326      2.116704   
+226    -0.389406    1.622762           1.914339      0.466037     -0.793361   
+
+     SHUTTLE.RUN  THREE.QUARTER.SPRINT  BENCH.PRESS  WINGSPAN.HEIGHT.RATIO  \
+0      -0.941679             -0.063505    -0.951012              -0.430308   
+1      -1.867523             -1.576738    -0.330073              -1.438753   
+2       0.474318             -0.143148    -1.571951              -0.604178   
+3      -0.070296             -0.143148    -0.951012               0.578136   
+4       0.256473              0.653290     0.911805              -0.708500   
+..           ...                   ...          ...                    ...   
+222    -0.505988              0.812578    -0.744033               0.369492   
+223    -0.070296              0.334715     0.911805               1.447485   
+224     1.400163              2.007235    -0.744033              -0.013021   
+225     0.910010              1.529372     0.290866              -0.917144   
+226    -2.357676             -1.019231     1.739723              -2.273328   
+
+     STANDING.TOUCH  MAX.TOUCH  above_max_vert_mean  cluster_label  
+0          1.036246   1.204465             0.986870              3  
+1         -0.377906  -0.295905             0.986870              1  
+2          0.492342  -0.065079            -1.013304              2  
+3         -1.574497  -1.796274            -1.013304              4  
+4          0.057218  -0.065079             0.986870              3  
+..              ...        ...                  ...            ...  
+222        0.492342  -0.180492            -1.013304              2  
+223        0.165999   0.165747             0.986870              3  
+224       -0.051563  -0.642144            -1.013304              2  
+225        0.927466   0.165747            -1.013304              2  
+226        1.906494   1.089052             0.986870              3  
+
+[227 rows x 19 columns]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="219">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data<span class="op">=</span>k_df, x<span class="op">=</span><span class="st">'BODY.FAT'</span>, y<span class="op">=</span><span class="st">'THREE.QUARTER.SPRINT'</span>, hue <span class="op">=</span> <span class="st">'cluster_label'</span>, palette <span class="op">=</span> <span class="st">'muted'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="219">
+<pre><code>&lt;Axes: xlabel='BODY.FAT', ylabel='THREE.QUARTER.SPRINT'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="clustering_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<section id="analysis" class="level3">
+<h3 class="anchored" data-anchor-id="analysis">Analysis</h3>
+<p>The optimal number of clusters for k-means was around 4-6 based on the elbow method. I chose to use 5 as the optimal number for my final k-means clustering. When plotted with ‘body fat’ and ‘three quarter sprint speed’ as the x and y axis, the clusters appear to overlap each other a lot. Each individual cluster and its shape can be made out and the area they span differ, but they overlap a lot, especially at one spot on the plot. Suggesting that k-means clustering is not able to greatly differentiate within the feature space.</p>
+</section>
+</section>
+<section id="dbscan-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="dbscan-clustering">DBSCAN Clustering</h2>
+<p>For DBSCAN clustering, I used just the features, ‘body fat’ and ‘three-quarter sprint speed’. DBSCAN would not properly predict labels for the nba combine dataset if it contained more than two features, and those two features were the the two selected when I performed feature selection for the best two features. I then hyper-parameter tuned by using the elbow method for eps and minimum sample size based on silhouette score. I then graphed the resulting clusters with ‘body fat’ and ‘max vertical’ as the x and y axis, as I was interested to see if the clustering could provide any insights in that feature space, and the ‘body fat’ and ‘three-quarter sprint speed’ were the only 2 features used to perform clustering.</p>
+<div class="cell" data-execution_count="228">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>eps_values <span class="op">=</span> [<span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>min_samples_values <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>silhouette_scores <span class="op">=</span> []</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>eps_param <span class="op">=</span> []</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>min_samp <span class="op">=</span> []</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> eps <span class="kw">in</span> eps_values:</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> min_samples <span class="kw">in</span> min_samples_values:</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        dbscan <span class="op">=</span> DBSCAN(eps<span class="op">=</span>eps, min_samples<span class="op">=</span>min_samples)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        labels <span class="op">=</span> dbscan.fit_predict(db_X_normalized)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(<span class="bu">set</span>(labels)) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>            silhouette <span class="op">=</span> silhouette_score(db_X_normalized, labels)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>            silhouette_scores.append(silhouette)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>            eps_param.append(eps)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>            min_samp.append(min_samples)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>result_df <span class="op">=</span> pd.DataFrame({<span class="st">"eps_value"</span>: eps_param, <span class="st">"min_samples"</span>: min_samp, <span class="st">"silhouette_score"</span>: silhouette_scores})</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>result_df.head()</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="228">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">eps_value</th>
+<th data-quarto-table-cell-role="th">min_samples</th>
+<th data-quarto-table-cell-role="th">silhouette_score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.1</td>
+<td>1</td>
+<td>0.196753</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0.1</td>
+<td>2</td>
+<td>-0.066301</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>0.1</td>
+<td>3</td>
+<td>-0.184751</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0.1</td>
+<td>4</td>
+<td>-0.336292</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>0.1</td>
+<td>5</td>
+<td>-0.385632</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="195">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>min_samples_values <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>graph <span class="op">=</span> sns.FacetGrid(result_df, col<span class="op">=</span><span class="st">"min_samples"</span>, col_wrap<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>graph.map_dataframe(sns.lineplot, x<span class="op">=</span><span class="st">"eps_value"</span>, y<span class="op">=</span><span class="st">"silhouette_score"</span>, marker<span class="op">=</span><span class="st">'o'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="clustering_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="225">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dbscan <span class="op">=</span> DBSCAN(eps<span class="op">=</span><span class="fl">0.4</span>, min_samples<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> dbscan.fit_predict(db_X_normalized)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dbscan_df <span class="op">=</span> pd.DataFrame(db_X_normalized, columns<span class="op">=</span>[<span class="st">'BODY.FAT'</span>,<span class="st">'THREE.QUARTER.SPRINT'</span>])</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>dbscan_df[<span class="st">'cluster_label'</span>] <span class="op">=</span> labels</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>dbscan_df[<span class="st">'MAX.VERTICAL'</span>] <span class="op">=</span> combine_df[<span class="st">'MAX.VERTICAL'</span>]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data<span class="op">=</span>dbscan_df, x<span class="op">=</span><span class="st">'BODY.FAT'</span>, y<span class="op">=</span><span class="st">'MAX.VERTICAL'</span>, hue <span class="op">=</span> <span class="st">'cluster_label'</span>, palette <span class="op">=</span> <span class="st">'muted'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="225">
+<pre><code>&lt;Axes: xlabel='BODY.FAT', ylabel='MAX.VERTICAL'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="clustering_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<section id="analysis-1" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-1">Analysis</h3>
+<p>The hyper-parameter tuning revealed the ideal parameters for eps and minimum sample size were 0.4 and 5 respectively. The plotted clustering with ‘body fat’ and ‘max vertical’ as the x and y axis did not have much pattern to it. There were only two cluster labels, a few of each. There was not much insight to be taken out other than the two selected features do not produce distinct clusters within the graphed feature space.</p>
+</section>
+</section>
+<section id="hierarchical-clustering" class="level2">
+<h2 class="anchored" data-anchor-id="hierarchical-clustering">Hierarchical Clustering</h2>
+<p>For Hierarchical clustering, I used the NBA combine dataset without label features as X. I first created a dendrogram to visualize the clustering and select an optimal threshold to select the optimal number of clusters at a natural distance. I then plotted the clusters with ‘body fat’ and ‘three quarter sprint speed’ as the x and y axis.</p>
+<div class="cell" data-execution_count="199">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.cluster.hierarchy <span class="im">import</span> linkage, dendrogram</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>linkage_matrix <span class="op">=</span> linkage(X_normalized, method<span class="op">=</span><span class="st">"ward"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>dendrogram(linkage_matrix)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>threshold <span class="op">=</span> <span class="dv">17</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span>threshold, color<span class="op">=</span><span class="st">'r'</span>, linestyle<span class="op">=</span><span class="st">'-'</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="clustering_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="227">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cluster <span class="op">=</span> AgglomerativeClustering(n_clusters<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> cluster.fit_predict(X_normalized)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>agg_df <span class="op">=</span> pd.DataFrame(X_normalized, columns<span class="op">=</span>feature_cols)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>agg_df[<span class="st">'cluster_label'</span>] <span class="op">=</span> labels</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data<span class="op">=</span>agg_df, x<span class="op">=</span><span class="st">'BODY.FAT'</span>, y<span class="op">=</span><span class="st">'THREE.QUARTER.SPRINT'</span>, hue <span class="op">=</span> <span class="st">'cluster_label'</span>, palette <span class="op">=</span> <span class="st">'muted'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="227">
+<pre><code>&lt;Axes: xlabel='BODY.FAT', ylabel='THREE.QUARTER.SPRINT'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="clustering_files/figure-html/cell-11-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<section id="analysis-2" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-2">Analysis</h3>
+<p>The dendrogram showed that a natural cutoff point was at 4 clusters, as the splits in the dendrogram became much more sporadic after. The resulting plot with cluster labels as colors the clusters once again appeared to overlap each other. The clusters were distinct in terms of the area and shape of each one, but there was a lot of overlap. Again suggesting that the clustering is not able to greatly differentiate when plotted in that feature space.</p>
+</section>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<p>Clustering the nba combine dataset using three different clustering algorithms in K-means, DBSCAN, and Hierarchical clustering and plotting for the features ‘body fat’ and ‘three-quarter sprint speed’, revealed a common theme of significant overlap among the clusters in the plotted feature space. This raises some questions about the distinctiveness of these features for effective clustering. For K-means, the optimal number of clusters, determined through the elbow method, was selected as 5. However, when visualizing the clusters in the feature space, significant overlap was observed, indicating that K-means struggled to differentiate within this space. Similarly, DBSCAN, after hyper-parameter tuning, did not reveal meaningful patterns in the plotted clusters, suggesting that the chosen features might not be conducive to distinctive clustering. Hierarchical clustering, with a natural cutoff point at 4 clusters, also exhibited overlapping clusters when visualized. These findings collectively suggest that the selected features may lack distinctiveness for effective clustering. Further exploration to find new distinct insights within the NBA combine dataset could be sought with alternative features or clustering techniques, however there may also not be further insights to be found.</p>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

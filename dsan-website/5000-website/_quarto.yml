@@ -21,9 +21,9 @@ website:
         text: Data Exploration
       - href: bayes.ipynb
         text: Naive Bayes
-      - href: clustering/clustering.qmd
+      - href: clustering/clustering.ipynb
         text: Clustering
-      - href: dimensionality.qmd
+      - href: dimensionality.ipynb
         text: Dimensionality Reduction
       - href: decision.qmd
         text: Decision Trees
