@@ -33,7 +33,7 @@ write.csv(api_data, file = "../../data/00-raw-data/api_nba_player_season.csv")
 ```
 
 ```{r NBA combine cleaning}
-
+library(stringr)
 nba_combine_data <- read.csv("../../data/00-raw-data/NBA_Draft_Combine.csv")
 
 #reformat names 
@@ -72,6 +72,10 @@ best_api_data <- max_points_season %>%
 
 best_api_data <- subset(best_api_data, select = -c(StatID, TeamID, PlayerID, SeasonType, GlobalTeamID, Updated, Seconds, FantasyPointsDraftKings, FantasyPointsYahoo, FantasyPointsFanDuel, FantasyPointsFantasyDraft, IsClosed, LineupConfirmed, LineupStatus))
 
+best_api_data$PPG <- round(best_api_data$Points/best_api_data$Games, 1)
+best_api_data$RPG <- round(best_api_data$Rebounds/best_api_data$Games, 1)
+best_api_data$APG <- round(best_api_data$Assists/best_api_data$Games, 1)
+
 write.csv(best_api_data, file = "../../data/01-modified-data/cleaned_best_NBA_season_player.csv")
 
 
@@ -81,7 +85,8 @@ write.csv(best_api_data, file = "../../data/01-modified-data/cleaned_best_NBA_se
 
 
 NBA <- left_join(best_api_data, nba_combine_data, by = "Name")
-NBA <- df[!is.na(df$combine_year), ]
+NBA <- NBA[!is.na(NBA$combine_year), ]
+
 
 write.csv(NBA, file = "../../data/01-modified-data/cleaned_NBA_combined.csv")
 
@@ -95,6 +100,10 @@ NFL <- read.csv("../../data/00-raw-data/nfl_combine.csv")
 NFL <- NFL[!is.na(NFL$Vertical), ]
 NFL <- subset(NFL, select = -c(AV, Pfr_ID))
 colnames(NFL)[which(names(NFL) == "Vertical")] <- "STANDING.VERTICAL"
+colnames(NFL)[which(names(NFL) == "Ht")] <- "HEIGHT"
+colnames(NFL)[which(names(NFL) == "Wt")] <- "WEIGHT"
+colnames(NFL)[which(names(NFL) == "Year")] <- "combine_year"
+colnames(NFL)[which(names(NFL) == "Player")] <- "Name"
 
 write.csv(NFL, file = "../../data/01-modified-data/cleaned_NFL_combine.csv")
 ```
