@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tyler McCormick DSAN-5000: Project thm12 - Data Exploration</title>
+<title>Tyler McCormick DSAN-5000: Project - Data Exploration</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -121,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="../">Tyler McCormick DSAN-5000: Project thm12</a> 
+      <a href="../">Tyler McCormick DSAN-5000: Project</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -199,12 +199,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../arm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ARM</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../conclusion.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Conclusions</span></a>
   </div>
@@ -254,6 +248,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="anchored" data-anchor-id="data-overview">Data overview</h4>
 <p>The NBA Player Combine and Season dataset contains a good number of features and datapoints. For this dataset, I am interested in looking at if there are physical and athletic predictors for vertical jump, and if vertical jump itself plays a role in determining on-court success in the NBA. The dataset consists of mostly continuous integer and float variable types, with a few categorical object type variables. There are a number of continous variables that indicate season statistics and on court-performance, as well as combine numbers that indicate physical and athletic attributes.</p>
 <div class="cell" data-execution_count="220">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -264,6 +260,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Feature and Data Information:'</span>)</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba.info())</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Shape: (886, 67)
 --------------------
@@ -349,26 +346,28 @@ None</code></pre>
 <h5 class="anchored" data-anchor-id="summary-stats-for-variables-of-interest">Summary stats for Variables of interest</h5>
 <p>I chose to highlight the summary statistics for a few significant variables that are of interest. Standing Vertical and Maximum Vertical are important because they are the key metric that I am interested in looking at. While similar, the key difference is that for Maximum vertical jump players were allowed a running start, while they are not for standing vertical. Points per Game, Rebounds per Game, and Assists per Game were included as they represent the three most tracked statistics in basketball, and are often the three stats most used to represent success.</p>
 <div class="cell" data-execution_count="208">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Standing Vertical Jump Summary Stats (inches)"</span>) </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"STANDING.VERTICAL"</span>].describe())</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Maximum Vertical Jump Summary Stats (inches)"</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"MAX.VERTICAL"</span>].describe())</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Points Per Game Summary Stats"</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"PPG"</span>].describe())</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Rebounds Per Game Summary Stats"</span>)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"RPG"</span>].describe())</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Assists Per Game Summary Stats"</span>)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"APG"</span>].describe())</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Standing Vertical Jump Summary Stats (inches)"</span>) </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"STANDING.VERTICAL"</span>].describe())</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Maximum Vertical Jump Summary Stats (inches)"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"MAX.VERTICAL"</span>].describe())</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Points Per Game Summary Stats"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"PPG"</span>].describe())</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Rebounds Per Game Summary Stats"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"RPG"</span>].describe())</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Assists Per Game Summary Stats"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nba[<span class="st">"APG"</span>].describe())</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Standing Vertical Jump Summary Stats (inches)
 count    766.000000
@@ -431,8 +430,10 @@ Name: APG, dtype: float64
 </section>
 <section id="visualizations" class="level4">
 <h4 class="anchored" data-anchor-id="visualizations">Visualizations</h4>
-<p>For visualizations I used boxplots and histograms to look at the distribution of Max Vertical Jump. I decided to look at max vertical jump specifically since it serves as aa better representation of an athletes highest possibly jumping ability and was so closely correlated to standing vertical jump, meaning standing vertical would likely produce similar resents when looking at the correlation between it and other variables. I looked at the correlation of maximum vertical jump to a number of variables to indicate in-game performance, as well as other combine metrics. For some visualizations I split by position to see if the results varied by position.</p>
-<div class="cell" data-execution_count="224">
+<p>For visualizations I used boxplots and histograms to look at the distribution of Max Vertical Jump. I decided to look at max vertical jump specifically since it serves as a better representation of an athletes highest possibly jumping ability and was so closely correlated to standing vertical jump, meaning standing vertical would likely produce similar results when looking at the correlation between it and other variables. I looked at the correlation of maximum vertical jump to a number of variables to indicate in-game performance, as well as other combine metrics. For some visualizations I split by position to see if the results varied by position.</p>
+<div class="cell" data-execution_count="239">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sns.boxplot(</span>
@@ -440,11 +441,11 @@ Name: APG, dtype: float64
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>,</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    order<span class="op">=</span> [<span class="st">"PG"</span>, <span class="st">"SG"</span>, <span class="st">"SF"</span>, <span class="st">"PF"</span>, <span class="st">"C"</span>]</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Position"</span>, ylabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>)</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>sns.displot(</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>)</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>,</span>
@@ -452,7 +453,7 @@ Name: APG, dtype: float64
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    col_wrap<span class="op">=</span><span class="dv">3</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Points per Game"</span>)</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>,</span>
@@ -460,7 +461,7 @@ Name: APG, dtype: float64
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    col_wrap<span class="op">=</span><span class="dv">3</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Rebounds per Game"</span>)</span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>,</span>
@@ -468,7 +469,7 @@ Name: APG, dtype: float64
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    col_wrap<span class="op">=</span><span class="dv">3</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Assists per Game"</span>)</span>
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>,</span>
@@ -476,7 +477,7 @@ Name: APG, dtype: float64
 <span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    col_wrap<span class="op">=</span><span class="dv">3</span></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Blocks"</span>)</span>
 <span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>,</span>
@@ -484,52 +485,53 @@ Name: APG, dtype: float64
 <span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">"Position"</span>,</span>
 <span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    col_wrap<span class="op">=</span><span class="dv">3</span></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Plus Minus"</span>)</span>
 <span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba, </span>
 <span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"combine_year"</span>,</span>
 <span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"MAX.VERTICAL"</span></span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(ylabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, xlabel<span class="op">=</span> <span class="st">"Combine Year"</span>)</span>
 <span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>, </span>
 <span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"WEIGHT"</span>, </span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Weight (lbs)"</span>)</span>
 <span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>, </span>
 <span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"HEIGHT"</span>, </span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Height (Inches)"</span>)</span>
 <span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>, </span>
 <span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"BMI"</span> </span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Body Mass Index"</span>)</span>
 <span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>, </span>
 <span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"BODY.FAT"</span>, </span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Body Fat %"</span>)</span>
 <span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"STANDING.VERTICAL"</span>, </span>
 <span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>, </span>
-<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(ylabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, xlabel<span class="op">=</span> <span class="st">"Standing Vertical (Inches)"</span>)</span>
 <span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>, </span>
 <span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"THREE.QUARTER.SPRINT"</span></span>
-<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Three Quarter Court Sprint Time (sec)"</span>)</span>
 <span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>, </span>
 <span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"SHUTTLE.RUN"</span></span>
-<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Shuttle Run Time (sec)"</span>)</span>
 <span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba,</span>
 <span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"MAX.VERTICAL"</span>, </span>
 <span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"LANE.AGILITY"</span></span>
-<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Maximum Vertical (Inches)"</span>, ylabel<span class="op">=</span> <span class="st">"Lane Agility Time (sec)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
 <p><img src="eda_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
 </div>
@@ -584,18 +586,20 @@ Name: APG, dtype: float64
 <h4 class="anchored" data-anchor-id="correlation-analysis">Correlation Analysis</h4>
 <p>I also made a correlation vector for just the combine metric variables to see what was the best physical and athletic predictors for vertical jump.</p>
 <div class="cell" data-execution_count="210">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>nba_combine <span class="op">=</span> pd.read_csv(<span class="st">"../../../data/01-modified-data/cleaned_NBA_combine.csv"</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>correlation_vector <span class="op">=</span> nba_combine.corrwith(nba_combine[<span class="st">'MAX.VERTICAL'</span>])</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(correlation_vector)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>sns.barplot(</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>correlation_vector,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>correlation_vector.index   </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>nba_combine <span class="op">=</span> pd.read_csv(<span class="st">"../../../data/01-modified-data/cleaned_NBA_combine.csv"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>correlation_vector <span class="op">=</span> nba_combine.corrwith(nba_combine[<span class="st">'MAX.VERTICAL'</span>])</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(correlation_vector)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>sns.barplot(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>correlation_vector,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>correlation_vector.index   </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unnamed: 0              -0.277047
 combine_year             0.278785
@@ -639,11 +643,14 @@ dtype: float64</code></pre>
 <h4 class="anchored" data-anchor-id="data-overview-1">Data Overview</h4>
 <p>The NFL combine dataset contains 14 features, most of which are continuous and represent combine measurements. The NFL combine only has a standing vertical jump test, so I will be looking to compare the distribution and averages of the NFL combine results the results from the NBA combine.</p>
 <div class="cell" data-execution_count="211">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>nfl <span class="op">=</span> pd.read_csv(<span class="st">"../../../data/01-modified-data/cleaned_NFL_combine.csv"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Shape:'</span>, nfl.shape)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Feature and Data Information:'</span>)</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nfl.info())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Shape: (4796, 15)
 Feature and Data Information:
@@ -677,9 +684,12 @@ None</code></pre>
 <h4 class="anchored" data-anchor-id="summary-stats-for-variables-of-interest-1">Summary stats for Variables of interest</h4>
 <p>The main feature of interest in this dataset is the standing veritcal jump test, since it is essentially the same event that the NBA combine has, making it one of the few official and standardized points of athletic comparison for NFL and NBA players.</p>
 <div class="cell" data-execution_count="212">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Standing Vertical Jump Summary Stats (inches)"</span>) </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nfl[<span class="st">"STANDING.VERTICAL"</span>].describe())</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Standing Vertical Jump Summary Stats (inches)
 count    4796.000000
@@ -698,7 +708,9 @@ Name: STANDING.VERTICAL, dtype: float64
 <section id="visualizations-for-nba-combine-compared-to-nfl-combine" class="level4">
 <h4 class="anchored" data-anchor-id="visualizations-for-nba-combine-compared-to-nfl-combine">Visualizations for NBA combine compared to NFL combine</h4>
 <p>For visualizations I want to compare the distribution of vertical jump test results as well as if the correlation to physical attributes like height and weight differs between the two leagues. In order to look at this I will be using boxplots and scatterlots from a merged dataset that contains NBA and NFL combine results.</p>
-<div class="cell" data-execution_count="226">
+<div class="cell" data-execution_count="240">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nba_combine <span class="op">=</span> pd.read_csv(<span class="st">"../../../data/01-modified-data/cleaned_NBA_combine.csv"</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>nba_combine[<span class="st">'league'</span>] <span class="op">=</span> <span class="st">"NBA"</span></span>
@@ -710,7 +722,7 @@ Name: STANDING.VERTICAL, dtype: float64
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba_nfl,</span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"league"</span>,</span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"STANDING.VERTICAL"</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"League"</span>, ylabel<span class="op">=</span> <span class="st">"Standing Vertical (Inches)"</span>)</span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba_nfl,</span>
@@ -719,7 +731,7 @@ Name: STANDING.VERTICAL, dtype: float64
 <span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">'league'</span>,</span>
 <span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">'league'</span>,</span>
 <span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    fit_reg<span class="op">=</span><span class="va">False</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Combine Year"</span>, ylabel<span class="op">=</span> <span class="st">"Standing Vertical (Inches)"</span>)</span>
 <span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba_nfl,</span>
@@ -727,7 +739,7 @@ Name: STANDING.VERTICAL, dtype: float64
 <span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span> <span class="st">'WEIGHT'</span>,</span>
 <span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">'league'</span>,</span>
 <span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">'league'</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(ylabel<span class="op">=</span><span class="st">"Weight (lbs)"</span>, xlabel<span class="op">=</span> <span class="st">"Standing Vertical (Inches)"</span>)</span>
 <span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>sns.lmplot(</span>
 <span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>nba_nfl,</span>
@@ -735,7 +747,8 @@ Name: STANDING.VERTICAL, dtype: float64
 <span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span> <span class="st">'HEIGHT'</span>,</span>
 <span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">'league'</span>,</span>
 <span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span><span class="st">'league'</span></span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(ylabel<span class="op">=</span><span class="st">"Height (Inches)"</span>, xlabel<span class="op">=</span> <span class="st">"Standing Vertical (Inches)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
 <p><img src="eda_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
 </div>
@@ -753,7 +766,7 @@ Name: STANDING.VERTICAL, dtype: float64
 <section id="insights-1" class="level4">
 <h4 class="anchored" data-anchor-id="insights-1">Insights</h4>
 <p>In analyzing the Exploratory Data analysis findings between the NFL and NBA, it becomes evident that the NFL exhibits a larger range, median, and maximum value in standing vertical jump compared to the NBA. Notably, when examining the correlation between weight and vertical jump performance in their respective combines, it is apparent that weight has a more pronounced negative correlation in the NFL combine. Height displays a weak negative correlation in both leagues, indicating that it may not significantly impact athletic success in either context. Vertical jump test performance does not significantly change over time in both the NFL and NBA.</p>
-<p>These findings reveal a few key insights that make a lot of intuitive sense when looking at the nature of the respective sports. While basketball involves the actual action of jumping much more frequently than jumping, every play in football starts from a static position. So, it would make sense that, on average, a football player would be better at exerting power and force from a static position since they do so during every play. I would think that NBA players would be better at jumping with momentum, but any person who can jump well from a standing position would also likely jump high with a running start. And since the NFL does not have a maximum vertical jump test, we are unable to definitively say which players would be better at jumping with momentum, but I would imagine the NFL players would also have a slight edge in that. The greater range and more pronounced negative correlation to weight also makes a lot of sense because of the range of positions in the NFL. NBA players all play a relatively similar role on the court, and all positions require a well-balanced athlete. Positions in the NFL, on the other hand, vary much more drastically. As linemen require size and strength much more than “skill positions” like wide receivers, which favor quick and agile athletes. Overall, the results reflect the nature of the sport and the way they translate to the standing vertical jump test.</p>
+<p>These findings reveal a few key insights that make a lot of intuitive sense when looking at the nature of the respective sports. While basketball involves the actual action of jumping much more frequently than football, every play in football starts from a static position. So, it would make sense that, on average, a football player would be better at exerting power and force from a static position since they do so during every play. I would think that NBA players would be better at jumping with momentum, but any person who can jump well from a standing position would also likely jump high with a running start. And since the NFL does not have a maximum vertical jump test, we are unable to definitively say which players would be better at jumping with momentum, but I would imagine the NFL players would also have a slight edge in that. The greater range and more pronounced negative correlation to weight also makes a lot of sense because of the range of positions in the NFL. NBA players all play a relatively similar role on the court, and all positions require a well-balanced athlete. Positions in the NFL, on the other hand, vary much more drastically. As linemen require size and strength much more than “skill positions” like wide receivers, which favor quick and agile athletes. Overall, the results reflect the nature of the sport and the way they translate to the standing vertical jump test.</p>
 </section>
 </section>
 <section id="olympic-high-jump-data" class="level3">
@@ -762,11 +775,14 @@ Name: STANDING.VERTICAL, dtype: float64
 <h4 class="anchored" data-anchor-id="data-overview-2">Data Overview</h4>
 <p>The Olympic high jump dataset has 9 features, most of which are categorical. Since Olympic high jump is measured much differently than the NBA and NFL combine, it is not useful to compare the numeric results, rather I am interested in looking at the distribution of the results, the change in results over time, and the distribution of nationalities in medaling place, as the olympics represent a large sample size of nationalities.</p>
 <div class="cell" data-execution_count="214">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>high_jump <span class="op">=</span> pd.read_csv(<span class="st">"../../../data/01-modified-data/cleaned_high_jump.csv"</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Shape:'</span>, high_jump.shape)</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Feature and Data Information:'</span>)</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(high_jump.info())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Shape: (107, 10)
 Feature and Data Information:
@@ -794,10 +810,12 @@ None</code></pre>
 <section id="summary-stats-for-variables-of-interest-2" class="level4">
 <h4 class="anchored" data-anchor-id="summary-stats-for-variables-of-interest-2">Summary stats for Variables of interest</h4>
 <div class="cell" data-execution_count="215">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Best Height (meters) Summary Stats"</span>) </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(high_jump[<span class="st">"Best Height (m)"</span>].describe())</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Best Height (meters) Summary Stats"</span>) </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(high_jump[<span class="st">"Best Height (m)"</span>].describe())</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Best Height (meters) Summary Stats
 count    104.000000
@@ -817,6 +835,8 @@ Name: Best Height (m), dtype: float64
 <h4 class="anchored" data-anchor-id="visualizations-1">Visualizations</h4>
 <p>For visualizations I used histograms and scatterplots to look at the distribution of results and countries, as well as the results over time. Since the Olympic dataset contains the results from both the men’s and women’s events, I included both but seperated them.</p>
 <div class="cell" data-execution_count="228">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sns.displot(</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>high_jump,</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"Best Height (m)"</span>,</span>
@@ -840,6 +860,7 @@ Name: Best Height (m), dtype: float64
 <span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    hue <span class="op">=</span> <span class="st">'Gender'</span>,</span>
 <span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    col<span class="op">=</span> <span class="st">'Gender'</span></span>
 <span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
 <p><img src="eda_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
 </div>
@@ -863,11 +884,14 @@ Name: Best Height (m), dtype: float64
 <h4 class="anchored" data-anchor-id="data-overview-3">Data Overview</h4>
 <p>The stretching dataset has 9 features, most of which are continuous. The data represents the results of a study that looked at the vertical jump height of a group of recreational athletes and collegiate students before and after doing dynamic stretching. The main interest with this dataset is to look at the range of improvement that occured among the participants.</p>
 <div class="cell" data-execution_count="217">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>stretching <span class="op">=</span> pd.read_csv(<span class="st">"../../../data/01-modified-data/cleaned_stretching.csv"</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Shape:'</span>, stretching.shape)</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Feature and Data Information:'</span>)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(stretching.info())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Shape: (50, 10)
 Feature and Data Information:
@@ -897,6 +921,8 @@ None</code></pre>
 <section id="summary-stats-for-variables-of-interest-3" class="level4">
 <h4 class="anchored" data-anchor-id="summary-stats-for-variables-of-interest-3">Summary stats for Variables of interest</h4>
 <div class="cell" data-execution_count="218">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Pre dynamic stretching Vertical jump results (cm)"</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(stretching[<span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Pre ) ( Cm )"</span>].describe())</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span>
@@ -904,6 +930,7 @@ None</code></pre>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Post dynamic stretching Vertical jump results (cm)"</span>)</span>
 <span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(stretching[<span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Post ) ( Cm )"</span>].describe())</span>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"------------------------------------"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Pre dynamic stretching Vertical jump results (cm)
 count    50.000000
@@ -933,18 +960,20 @@ Name: Vertical jump\n height ( Post ) ( Cm ), dtype: float64
 <section id="visualizations-2" class="level4">
 <h4 class="anchored" data-anchor-id="visualizations-2">Visualizations</h4>
 <p>For visualizations I used boxplots and a histogram to look at the before and after results.</p>
-<div class="cell" data-execution_count="230">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>pre_post <span class="op">=</span> stretching[[<span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Pre ) ( Cm )"</span>, <span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Post ) ( Cm )"</span>, <span class="st">'Gender'</span> ]]</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>stretching[<span class="st">'vert_difference'</span>] <span class="op">=</span> stretching[<span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Post ) ( Cm )"</span>] <span class="op">-</span> stretching[<span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Pre ) ( Cm )"</span>]</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>sns.boxplot(</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span> pre_post</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>sns.displot(</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>stretching,</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">'vert_difference'</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="242">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pre_post <span class="op">=</span> stretching[[<span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Pre ) ( Cm )"</span>, <span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Post ) ( Cm )"</span>, <span class="st">'Gender'</span> ]]</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>stretching[<span class="st">'vert_difference'</span>] <span class="op">=</span> stretching[<span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Post ) ( Cm )"</span>] <span class="op">-</span> stretching[<span class="st">"Vertical jump</span><span class="ch">\n</span><span class="st"> height ( Pre ) ( Cm )"</span>]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>sns.boxplot(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span> pre_post</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>sns.displot(</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>stretching,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">'vert_difference'</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>).<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Difference in Vertical Height Post Stretching (Cm)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
 <p><img src="eda_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
 </div>
@@ -967,7 +996,7 @@ Name: Vertical jump\n height ( Post ) ( Cm ), dtype: float64
 <li>Agility and speed will have positive correlation to vertical jump.</li>
 <li>Nationality will not play a major role in vertical jump.</li>
 <li>Athletes are jumping higher over time.</li>
-<li>Players from other sports will have a similar vertical jump ability depending on the athleticism requiem in the sport.</li>
+<li>Players from other sports will have a similar vertical jump ability depending on the athleticism required in the sport.</li>
 <li>Warming up and stretching moderately improves vertical jump.</li>
 </ul>
 <p>After performing EDA and examining the results, I believe that, for the most part, my initial hypotheses were validated. Smaller and lighter players indeed tend to achieve higher vertical jumps, as evidenced by the negative correlation between weight and maximum vertical jump in both the NBA and NFL datasets. However, when it comes to on-court performance, there isn’t a strong correlation between maximum vertical jump and traditional statistics like points per game, rebounds, assists, and point differentials. In contrast, agility and speed tests, including the three-quarter sprint, lane agility, and shuttle run, show positive correlations with vertical jump, aligning with the hypothesis that these factors influence jumping ability. Furthermore, the data suggests that nationality does not significantly impact vertical jump performance, particularly evident in the Olympic high jump dataset. There is a slight increase in average maximum vertical jump results over time, but this is only made evident when looking at a large timespan rather than year to year. The impact of different sports on vertical jump ability and the influence of warming up through dynamic stretching are areas that require further exploration. Notably, the dynamic stretching study supports the notion that a warm-up involving movement and stretching can have a positive effect on vertical jump height for most participants.</p>

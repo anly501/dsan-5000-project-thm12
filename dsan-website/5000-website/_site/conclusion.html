@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tyler McCormick DSAN-5000: Project thm12 – conclusion</title>
+<title>Tyler McCormick DSAN-5000: Project – conclusion</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -87,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Tyler McCormick DSAN-5000: Project thm12</a> 
+      <a href="./">Tyler McCormick DSAN-5000: Project</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -165,12 +165,6 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./arm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ARM</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./conclusion.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Conclusions</span></a>
   </div>
@@ -181,15 +175,72 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#conclusion-and-recap" id="toc-conclusion-and-recap" class="nav-link active" data-scroll-target="#conclusion-and-recap">Conclusion and Recap</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
 
+<section id="conclusion-and-recap" class="level1">
+<h1>Conclusion and Recap</h1>
+<p>To quickly recap the results of the various analyses done in this project, EDA revealed that smaller and lighter players exhibit higher vertical jumps, supported by negative correlations between weight and maximum vertical jump in both the NBA and NFL datasets. While there isn’t a robust correlation between maximum vertical jump and traditional on-court performance metrics, agility and speed tests show positive correlations with vertical jump, aligning with the initial hypothesis. Nationality does not significantly impact vertical jump performance, as seen in the Olympic high jump dataset. There is a slight increase in average maximum vertical jump results over time, especially evident with a broader timespan.</p>
+<p>Additionally, the Naive Bayes classifier demonstrates good precision, specificity, and accuracy but has room for improvement in recall and negative predictive value. Text data analysis suggests that certain team and player names are associated with higher vertical jumps, indicating potential connections between specific teams or players and jumping ability. Clustering algorithms (K-means, DBSCAN, Hierarchical clustering) did not reveal distinctive patterns in the NBA combine dataset, indicating potential limitations in the chosen features for effective clustering.</p>
+<p>Dimensionality reduction techniques, such as PCA and t-SNE, provide complementary insights, capturing nuances in players’ size, build, and jumping ability. Decision trees, both for classification and regression, highlight the significance of features like three-quarter sprint speed in predicting maximum vertical jump height. The decision tree models, while not the most accurate, offer valuable insights into the predictive capabilities of various features. Overall, the combination of these data science approaches provides a comprehensive understanding of factors influencing vertical jump performance in athletes and basketball.</p>
+<p>Based on these results, the initial list of questions posed in the introduction can be answered as follows:</p>
+<p><b>What other athletic abilities are correlated to jumping higher in basketball? </b></p>
+<ul>
+<li>Speed and agility were correlated to jumping higher as made evident by the negative correlation between three quarter sprint and lane agility time and maximum vertical jump height.</li>
+</ul>
+<p><b>Does speed affect vertical jump (i.e., sprint speed)? </b></p>
+<ul>
+<li>Yes, based on EDA and other models, faster sprint times were correlated to a higher vertical and were a good predictor of maximum vertical jump as well.</li>
+</ul>
+<p><b>Do certain positions jump higher? </b></p>
+<ul>
+<li>EDA revealed that smaller positions like Guards tend to have a higher average maximum vertical jump.</li>
+</ul>
+<p><b>Does jumping higher translate to improved on-court performance at the NBA level? </b></p>
+<ul>
+<li>EDA showed there was little to no correlation between maximum vertical jump and major in-game performance metrics like points, rebounds, assists, steals, and blocks.</li>
+</ul>
+<p><b>Does height affect jumping ability? </b></p>
+<ul>
+<li>EDA results showed shorter players tended to have a higher maximum vertical jump.</li>
+</ul>
+<p><b>Does weight affect jumping ability? </b></p>
+<ul>
+<li>EDA results showed lighter players tended to have a higher maximum vertical jump.</li>
+</ul>
+<p><b>Are players jumping higher as time goes on and training methods improve? </b></p>
+<ul>
+<li>Based on both the olympic high jump and combine data, it does seem that jump heights are improving over time, just not at a rate that can be seen on a year to year basis. However, this is not conclusive, as these two datasets only provide a snippet of the collective results and measurements taken over the years from various sports. An inference can be made based on the olympic training dataset, but combine numbers have not been tracked long enough to make a conclusive statement on vertical jump height in other sports.</li>
+</ul>
+<p><b>Do players from certain nationalities jump higher? </b></p>
+<ul>
+<li>Results from the olympic high jump data would suggest so, but a variety of other variables are likely affecting this result.</li>
+</ul>
+<p><b>How does the jumping ability of NBA players compare to players of other sports like Football and the NFL? </b></p>
+<ul>
+<li>NFL players had a wider range and higher average for standing vertical jump height. However, this particular test more accurately reflects the physical demands of football compared to basketball.</li>
+</ul>
+<p><b>Can other factors like warming up and stretching affect jumping ability? </b></p>
+<ul>
+<li>Data suggested warming up with a dynamic stretching routine results in a higher vertical jump for most individuals.</li>
+</ul>
+<p>These answers are not definitive nor conclusive, but rather simply what the data pointed to based on the various analyses and models performed in this particular project. But the general importance of vertical jump in terms of in-game basketball performance and athletic performance is made quite clear after completing the data-science life-cycle.</p>
+<p>The evidence suggests that vertical jump does not translate to better or worse on-court basketball play at the NBA level. However this conclusion of vertical jump not having an effect on in game performance can really only be made at the NBA level. In the NBA, where every player can be regarded as an elite athlete, the correlation between a player’s vertical jump and their in-game performance is likely much less pronounced than at other levels. In this elite setting, having a higher or lower vertical jump relative to other NBA players does not conclusively correlate with superior on-court prowess. The results may vary at different levels of competition, however, the scope of this project and readily available data make it hard to analyze other levels of basketball.</p>
+<p>Other physical and athletic performance metrics like those tested at the NBA combine can be used as a predictor of vertical jump. Exploring various physical and athletic metrics from the NBA combine, like short-distance sprint speed and body composition indicators such as body fat percentage, reveals their potential as predictors for vertical jump height. These make a lot of intuitive sense, as sprinting and jumping both involve leg strength and power output, and the more mass that is needed to be moved upwards for a vertical jump, the more power and strength is needed.</p>
+<p>This project is far from comprehensive, and raises as many additional questions as it does answers. Which exemplifies the beauty and chaos of the never-ending cycle of data analysis and data-science life-cycle. For now, this project can only provide data based insights rather than definite answers or conclusions. But as technology and analytics become more and more prevalent in the world of sports, many of these answers can’t be far away.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

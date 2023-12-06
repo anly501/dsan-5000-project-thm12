@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tyler McCormick DSAN-5000: Project thm12 - Dimensionality Reduction</title>
+<title>Tyler McCormick DSAN-5000: Project - Dimensionality Reduction</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -121,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Tyler McCormick DSAN-5000: Project thm12</a> 
+      <a href="./">Tyler McCormick DSAN-5000: Project</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -199,12 +199,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./arm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ARM</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="./conclusion.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Conclusions</span></a>
   </div>
@@ -227,8 +221,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#dimensionality-reduction-with-t-sne" id="toc-dimensionality-reduction-with-t-sne" class="nav-link" data-scroll-target="#dimensionality-reduction-with-t-sne">Dimensionality Reduction with t-SNE</a>
   <ul class="collapse">
   <li><a href="#analysis-1" id="toc-analysis-1" class="nav-link" data-scroll-target="#analysis-1">Analysis</a></li>
-  <li><a href="#comparison-and-conclusion" id="toc-comparison-and-conclusion" class="nav-link" data-scroll-target="#comparison-and-conclusion">Comparison and Conclusion</a></li>
   </ul></li>
+  <li><a href="#comparison-and-conclusion" id="toc-comparison-and-conclusion" class="nav-link" data-scroll-target="#comparison-and-conclusion">Comparison and Conclusion</a></li>
   </ul>
 </nav>
     </div>
@@ -254,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="introduction" class="level3">
 <h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
-<p>In this section, I will be performing dimensionality reduction on the NBA combine dataset without label features. Dimensionality reduction is a tool used in data analysis and machine learning to address the challenges posed by high-dimensional datasets. Dimensionality reduction methods aim to capture the essential information contained in the original dataset while reducing the number of features. By transforming the data into a lower-dimensional representation, these techniques can enhance computational efficiency, alleviate the curse of dimensionality, and can reveal underlying patterns or structures in the data. I will be performing dimensionality reduction using PCA and t-SNE is python. PCA (Principal Component Analysis) is a statistical technique that reduces the dimensionality of high-dimensional datasets by identifying principal components through linear transformations, generating a low-dimensional representation useful for both supervised learning and data visualization. t-SNE (T-distributed Stochastic Neighbor Embedding) is a non-linear dimensionality reduction technique that visualizes high-dimensional data in a lower-dimensional space by employing a probability distribution to group similar data points together while maintaining separation between dissimilar points. By performing dimensionality reduction using both techniques, I hope to gain insights on if combine measurements can be effectively predicted, retained, and shown with reduced dimensions, and if any future insights on other combine measurements can be related to vertical jump.</p>
+<p>In this section, I will be performing dimensionality reduction on the NBA combine dataset without label features. Dimensionality reduction is a tool used in data analysis and machine learning to address the challenges posed by high-dimensional datasets. Dimensionality reduction methods aim to capture the essential information contained in the original dataset while reducing the number of features. By transforming the data into a lower-dimensional representation, these techniques can enhance computational efficiency, alleviate the curse of dimensionality, and can reveal underlying patterns or structures in the data. I will be performing dimensionality reduction using PCA and t-SNE in python. PCA (Principal Component Analysis) is a statistical technique that reduces the dimensionality of high-dimensional datasets by identifying principal components through linear transformations, generating a low-dimensional representation useful for both supervised learning and data visualization. t-SNE (T-distributed Stochastic Neighbor Embedding) is a non-linear dimensionality reduction technique that visualizes high-dimensional data in a lower-dimensional space by employing a probability distribution to group similar data points together while maintaining separation between dissimilar points. By performing dimensionality reduction using both techniques, I hope to gain insights on if combine measurements can be effectively predicted, retained, and shown with reduced dimensions, and if any future insights on other combine measurements can be related to vertical jump.</p>
 </section>
 <section id="dimensionality-reduction-with-pca" class="level2">
 <h2 class="anchored" data-anchor-id="dimensionality-reduction-with-pca">Dimensionality Reduction with PCA</h2>
@@ -270,19 +264,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_samples, silhouette_score</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/01-modified-data/cleaned_NBA_combine.csv"</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> combine_df[combine_df[<span class="st">"combine_year"</span>]<span class="op">&gt;</span><span class="dv">2009</span>]</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> combine_df.dropna()</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>max_vert_mean <span class="op">=</span> combine_df[<span class="st">"MAX.VERTICAL"</span>].mean()</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>combine_df[<span class="st">"above_max_vert_mean"</span>] <span class="op">=</span> (combine_df[<span class="st">"MAX.VERTICAL"</span>]<span class="op">&gt;</span> max_vert_mean).astype(<span class="bu">int</span>)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> combine_df.reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>label_vec <span class="op">=</span> combine_df[<span class="st">"above_max_vert_mean"</span>]</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>drop_cols <span class="op">=</span> [<span class="st">"Unnamed: 0"</span>, <span class="st">"POS"</span>, <span class="st">"combine_year"</span>, <span class="st">"Name"</span>, <span class="st">'above_max_vert_mean'</span>]</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>feature_matrix <span class="op">=</span> combine_df.drop(columns<span class="op">=</span> drop_cols)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>feature_cols <span class="op">=</span> feature_matrix.columns.tolist()</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/01-modified-data/ccleaned_NBA_combine_no_NA.csv"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>label_vec <span class="op">=</span> combine_df[<span class="st">"above_max_vert_mean"</span>]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>drop_cols <span class="op">=</span> [<span class="st">"Unnamed: 0"</span>, <span class="st">"POS"</span>, <span class="st">"combine_year"</span>, <span class="st">"Name"</span>, <span class="st">'above_max_vert_mean'</span>]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>feature_matrix <span class="op">=</span> combine_df.drop(columns<span class="op">=</span> drop_cols)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>feature_cols <span class="op">=</span> feature_matrix.columns.tolist()</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell" data-execution_count="194">
@@ -519,12 +508,12 @@ In a future version, DataFrame.max(axis=None) will return a scalar max over the 
 <h3 class="anchored" data-anchor-id="analysis-1">Analysis</h3>
 <p>At a low perplexity (1), the t-SNE embeddings revealed distinct clusters, particularly 3-4 players with above-average vertical jumps forming isolated groups, while players with below-average vertical jumps clustered separately. Intriguingly, numerous clusters comprised players with identical ‘above_max_vert_mean’ values. Shifting to perplexity 30, the resulting distributions and clusters displayed variability with each code execution. Notably, it seemed that one feature often captured a player’s general size and build, while the other tended to represent their jumping ability, as discerned from both graph color and player names. Extending this analysis to perplexity 50, a similar pattern persisted, albeit with data points more evenly dispersed across the plot, contributing to a nuanced understanding of the dataset’s structure and relationships.</p>
 </section>
-<section id="comparison-and-conclusion" class="level3">
-<h3 class="anchored" data-anchor-id="comparison-and-conclusion">Comparison and Conclusion</h3>
+</section>
+<section id="comparison-and-conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="comparison-and-conclusion">Comparison and Conclusion</h2>
 <p>Both PCA and t-SNE were able to capture combine event results and plot players based on size and athleticism with lower dimensions. T-SNE, visualized with Plotly, revealed distinct clusters at varying perplexity values, effectively capturing nuanced relationships between players’ size, build, and jumping ability. PCA, emphasizing ‘Height’ and ‘Weight’ through eigenvalues, identified three optimal components. Principal Component 2, when plotted against ‘above_max_vert_mean,’ effectively distinguished patterns, revealing its pivotal role in delineating jump performance. There is a general trade-off between the two techniques. While t-SNE provides high-quality visualizations, it is computationally expensive and sensitive to hyperparameters, potentially leading to varied results. But with PCA being a linear method, it may struggle to capture non-linear relationships in the data. But at least for this analysis, t-SNE and PCA complemented each other well, with PCA adept at distinguishing players based on their vertical jump ability and t-SNE excelling in capturing both jumping ability and size, especially at a higher perplexity.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

@@ -59,6 +59,7 @@ write.csv(nba_combine_data, file = "../../data/01-modified-data/cleaned_nba_comb
 
 ```{r NBA player season cleaning}
 library(dplyr)
+api_data <- read.csv("../../data/00-raw-data/api_nba_player_season.csv")
 
 #only keep season data for each player in which they scored the most points
 grouped_api_data <- api_data %>%

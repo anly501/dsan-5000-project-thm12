@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: "Tyler McCormick DSAN-5000: Project thm12"
+  title: "Tyler McCormick DSAN-5000: Project"
   sidebar:
     contents:
       - href: index.qmd
@@ -27,14 +27,12 @@ website:
         text: Dimensionality Reduction
       - href: decision.ipynb
         text: Decision Trees
-      - href: arm.qmd
-        text: ARM
       - href: conclusion.qmd
         text: Conclusions
       
 format:
   html:
-    theme: cosmo
+    theme: yeti
     toc: true
 
 

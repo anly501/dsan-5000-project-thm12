@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tyler McCormick DSAN-5000: Project thm12 - Clustering</title>
+<title>Tyler McCormick DSAN-5000: Project - Clustering</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -124,7 +124,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="../">Tyler McCormick DSAN-5000: Project thm12</a> 
+      <a href="../">Tyler McCormick DSAN-5000: Project</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -202,12 +202,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../arm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ARM</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../conclusion.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Conclusions</span></a>
   </div>
@@ -224,7 +218,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#theory" id="toc-theory" class="nav-link" data-scroll-target="#theory">Theory</a></li>
-  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering">K-Means CLustering</a>
+  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering">K-Means Clustering</a>
   <ul class="collapse">
   <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">Analysis</a></li>
   </ul></li>
@@ -268,11 +262,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="theory">Theory</h3>
 <p>I will now be explaining the three clustering methods I will be using: K-means, DBSCAN, and Hierarchical.</p>
 <p>K-means clustering uses an algorithm to cluster and group data points based on centroids or the center of a cluster. K-means creates clusters based on a set k clusters, where the centroid is the mean of the data points in a given cluster. It does this by repeatedly assigning points to the nearest centroid, adjusting the centroids, and repeating until the data is divided into k clusters based on their average locations. Parameters for the model can be tuned and selected in a variety of ways including the elbow method and silhouette analysis. The elbow method is done by running K-means for various k values, and plotting metrics like distortion, inertia, and silhouette score, and identifying the “elbow” point in the plot where increasing k yields diminishingly better results as the optimal k. Silhouette Analysis measures cohesion and separation, yielding a silhouette score to identify the optimal number of clusters.</p>
-<p>DBSCAN or Density-Based Spatial Clustering of Applications with Noise is a density-based cluster identification method that recognizes clusters as dense point regions separated by low-density areas from other high-density regions. DBSCAN is an algorithm that groups closely packed points based on their proximity, identifying outliers as points in low-density regions with distant neighbors. This clustering method is useful for irregular or intertwined clusters and datasets that have a lot of noise and outliers. The elbow and silhouette method can also be used to tune parameters for the model, like eps and minimum sample size.In DBSCAN eps defines the maximum distance between two points for one to be considered in the neighborhood of the other, while the minimum sample size parameter the minimum number of points required to form a region. These can be graphed with the corresponding silhouette score and the model can be tuned accordingly.</p>
+<p>DBSCAN or Density-Based Spatial Clustering of Applications with Noise is a density-based cluster identification method that recognizes clusters as dense point regions separated by low-density areas from other high-density regions. DBSCAN is an algorithm that groups closely packed points based on their proximity, identifying outliers as points in low-density regions with distant neighbors. This clustering method is useful for irregular or intertwined clusters and datasets that have a lot of noise and outliers. The elbow and silhouette method can also be used to tune parameters for the model, like eps and minimum sample size. In DBSCAN eps defines the maximum distance between two points for one to be considered in the neighborhood of the other, while the minimum sample size parameter the minimum number of points required to form a region. These can be graphed with the corresponding silhouette score and the model can be tuned accordingly.</p>
 <p>Hierarchical clustering organizes data into nested clusters, forming a hierarchical tree-like structure. It doesn’t assume a predetermined number of clusters as k-means does. In the agglomerative approach, which I will be using in this section. Each observation begins in its own cluster, and clusters are progressively merged as one ascends the hierarchy in a bottom-up fashion. A useful tool for visualizing and selecting the number of clusters for agglomerative clustering is through a dendrogram. A dendrogram is a tree-like diagram that represents the hierarchical structure of clusters in hierarchical clustering, showcasing the order and manner in which clusters merge, going up from each individual datapoint. It can show where there are natural breaks in clusters along different differences, which can be very useful for selecting the number of clusters to have.</p>
 </section>
 <section id="k-means-clustering" class="level2">
-<h2 class="anchored" data-anchor-id="k-means-clustering">K-Means CLustering</h2>
+<h2 class="anchored" data-anchor-id="k-means-clustering">K-Means Clustering</h2>
 <p>For K-means clustering, I used the NBA combine dataset without label features as X. I normalized X, and tuned for the optimal number of clusters by using the elbow method. I did this by looping through values for the number of clusters, and plotted the resulting distortion and inertia. I then found the elbow point in the graph where both were minimized and increasing the number of clusters would produce diminishing lower values for inertia and distortion. I then plotted the clusters as colors on a scatter plot with ‘body fat’ and ‘three quarter sprint speed’ as the x and y axis. I chose to plot the clusters with these features since these two features were the two selected when I performed feature selection for the best two features in the Naive Bayes section.</p>
 <div class="cell" data-execution_count="185">
 <details>
@@ -286,25 +280,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestNeighbors</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_score</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> pd.read_csv(<span class="st">"../../../data/01-modified-data/cleaned_NBA_combine.csv"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> combine_df[combine_df[<span class="st">"combine_year"</span>]<span class="op">&gt;</span><span class="dv">2009</span>]</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> combine_df.dropna()</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>max_vert_mean <span class="op">=</span> combine_df[<span class="st">"MAX.VERTICAL"</span>].mean()</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>combine_df[<span class="st">"above_max_vert_mean"</span>] <span class="op">=</span> (combine_df[<span class="st">"MAX.VERTICAL"</span>]<span class="op">&gt;</span> max_vert_mean).astype(<span class="bu">int</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>label_vec <span class="op">=</span> combine_df[<span class="st">"above_max_vert_mean"</span>]</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>drop_cols <span class="op">=</span> [<span class="st">"Unnamed: 0"</span>, <span class="st">"POS"</span>, <span class="st">"combine_year"</span>, <span class="st">"Name"</span>]</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>feature_matrix <span class="op">=</span> combine_df.drop(columns<span class="op">=</span> drop_cols)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>db_matrix <span class="op">=</span> feature_matrix[[<span class="st">'BODY.FAT'</span>, <span class="st">'THREE.QUARTER.SPRINT'</span>]]</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>feature_cols <span class="op">=</span> feature_matrix.columns.tolist()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>combine_df <span class="op">=</span> pd.read_csv(<span class="st">"../../data/01-modified-data/ccleaned_NBA_combine_no_NA.csv"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>label_vec <span class="op">=</span> combine_df[<span class="st">"above_max_vert_mean"</span>]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>drop_cols <span class="op">=</span> [<span class="st">"Unnamed: 0"</span>, <span class="st">"POS"</span>, <span class="st">"combine_year"</span>, <span class="st">"Name"</span>]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>feature_matrix <span class="op">=</span> combine_df.drop(columns<span class="op">=</span> drop_cols)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>db_matrix <span class="op">=</span> feature_matrix[[<span class="st">'BODY.FAT'</span>, <span class="st">'THREE.QUARTER.SPRINT'</span>]]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>feature_cols <span class="op">=</span> feature_matrix.columns.tolist()</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> feature_matrix</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>X_normalized <span class="op">=</span> scaler.fit_transform(X)</span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> feature_matrix</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>db_X <span class="op">=</span> db_matrix</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>X_normalized <span class="op">=</span> scaler.fit_transform(X)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>db_X <span class="op">=</span> db_matrix</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> StandardScaler()</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>db_X_normalized <span class="op">=</span> scaler.fit_transform(db_X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>db_X_normalized <span class="op">=</span> scaler.fit_transform(db_X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell" data-execution_count="220">
@@ -500,9 +490,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell" data-execution_count="219">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data<span class="op">=</span>k_df, x<span class="op">=</span><span class="st">'BODY.FAT'</span>, y<span class="op">=</span><span class="st">'THREE.QUARTER.SPRINT'</span>, hue <span class="op">=</span> <span class="st">'cluster_label'</span>, palette <span class="op">=</span> <span class="st">'muted'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display" data-execution_count="219">
 <pre><code>&lt;Axes: xlabel='BODY.FAT', ylabel='THREE.QUARTER.SPRINT'&gt;</code></pre>
 </div>

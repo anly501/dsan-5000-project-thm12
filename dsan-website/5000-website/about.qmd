@@ -1,7 +1,10 @@
+![](images/photo.png)
+
 # About Tyler McCormick 
 
 
 ### Bio
+
 
 Tyler McCormick is a senior at Georgetown’s McDonough School of Business pursuing a fifth-year Master’s in Data Science and Analytics. His work experience includes two early-stage startups, Nodar and Margot’s Morsels, supporting financial analysis and marketing and helping a large $2 billion consumer product and service company, Leaf Home, understand opportunities to significantly improve their gross margins. Majoring in operations and analytics, Tyler is building foundational business skills and expertise in helping businesses use data-driven decisions as a competitive advantage by leveraging data for real-time decision-making and long-term strategy. He is positioning himself on the cutting edge of how data, particularly AI, will change the future. 
 
