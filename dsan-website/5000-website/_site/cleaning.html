@@ -251,7 +251,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I cleaned this data with the intent to merge it with NBA player season data. The first thing I had to do with the NBA combine data was adjust the format of the player name column. I changed the format from (Last, First) to (First Last) using strsplit and sapply in R. I also changed the name of the column from “PLAYER” to “Name” so that can merge the dataset by “Name”. I then renamed some other columns to be more clear, and dropped those that were not needed. I also made some another version where I got rid of NA values in order to use the dataset for Naive Bayes and other ML models later. One of the combine drills was implemented in 2009, so I removed all values prior to that year. I also added a binary feature that represents if the players maximum vertical is above the mean of the dataset.</p>
 <p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/codes/01-data-gathering/data_gathering%26cleaning.Rmd">Link to code</a></p>
 <p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/data/01-modified-data/cleaned_nba_combine.csv">Link to data</a></p>
-<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/data/01-modified-data/cleaned_nba_combine_no_NA.csv">Link to no NA data</a></p>
+<p><a href="https://github.com/anly501/dsan-5000-project-thm12/blob/main/data/01-modified-data/cleaned_NBA_combine_no_NA.csv">Link to no NA data</a></p>
 <div class="cell" data-execution_count="12">
 <details>
 <summary>Code</summary>
